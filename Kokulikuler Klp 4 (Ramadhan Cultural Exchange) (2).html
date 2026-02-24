@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light"> 
+    <title>Ramadhan Cultural Exchange | SMKN 1 Wonosobo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* === TEMA WARNA MODERN === */
+        :root {
+            --primary: #0a3d2e;
+            --primary-light: #186a4f;
+            --accent: #f1c40f; 
+            --text-dark: #2c3e50;
+            --text-light: #ffffff;
+            --bg-main: #eef2f1;
+            --bg-card: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        /* Memaksa background tetap terang meski HP dalam mode gelap */
+        body { background-color: var(--bg-main) !important; color: var(--text-dark) !important; line-height: 1.7; overflow-x: hidden; }
+
+        /* === SPLASH SCREEN RAMADHAN === */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--text-light);
+            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+            overflow: hidden;
+        }
+
+        /* Animasi partikel bintang di splash screen */
+        .splash-star {
+            position: absolute;
+            background: var(--accent);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: floatStars 6s infinite ease-in-out;
+        }
+        .splash-star:nth-child(1) { width: 20px; height: 20px; top: 10%; left: 15%; animation-delay: 0s; }
+        .splash-star:nth-child(2) { width: 15px; height: 15px; top: 20%; right: 20%; animation-delay: 1s; }
+        .splash-star:nth-child(3) { width: 25px; height: 25px; top: 70%; left: 10%; animation-delay: 2s; }
+        .splash-star:nth-child(4) { width: 18px; height: 18px; top: 75%; right: 15%; animation-delay: 1.5s; }
+        .splash-star:nth-child(5) { width: 12px; height: 12px; top: 30%; left: 80%; animation-delay: 0.5s; }
+        .splash-star:nth-child(6) { width: 22px; height: 22px; top: 60%; right: 25%; animation-delay: 2.5s; }
+
+        @keyframes floatStars {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-30px) scale(1.3); opacity: 1; }
+        }
+
+        .splash-content {
+            animation: popUp 1s ease-out forwards;
+            position: relative;
+            z-index: 2;
+        }
+
+        .splash-content .moon {
+            font-size: 5rem;
+            margin-bottom: 15px;
+            animation: pulseGlow 2s infinite alternate;
+            display: inline-block;
+        }
+
+        .splash-content h2 {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+            text-shadow: 2px 4px 10px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+            animation: slideInFromTop 1s ease-out;
+        }
+
+        .splash-content p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        @keyframes popUp {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1) rotate(-10deg); filter: drop-shadow(0 0 10px rgba(241, 196, 15, 0.4)); }
+            100% { transform: scale(1.1) rotate(10deg); filter: drop-shadow(0 0 30px rgba(241, 196, 15, 1)); }
+        }
+
+        @keyframes slideInFromTop {
+            0% { transform: translateY(-50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            0% { transform: translateY(30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 0.9; }
+        }
+
+        /* Class untuk menyembunyikan splash screen */
+        .hide-splash {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* === HERO SECTION === */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: var(--text-light);
+            text-align: center;
+            padding: 6rem 1.5rem 8rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .hero-divider {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 80px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23eef2f1' fill-opacity='1' d='M0,160L48,170.7C96,181,192,203,288,197.3C384,192,480,160,576,160C672,160,768,192,864,213.3C960,235,1056,245,1152,229.3C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+            background-size: cover; background-position: center bottom; z-index: 2;
+            animation: waveMove 3s ease-in-out infinite;
+        }
+
+        @keyframes waveMove {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(-10px); }
+        }
+
+        .hero h1 { 
+            font-size: 2.8rem; 
+            font-weight: 700; 
+            text-shadow: 2px 4px 6px rgba(0,0,0,0.4); 
+            margin-bottom: 15px; 
+            position: relative; 
+            z-index: 5;
+            animation: fadeInDown 1s ease-out;
+        }
+        .hero p { 
+            font-size: 1.1rem; 
+            font-weight: 300; 
+            opacity: 0.9; 
+            position: relative; 
+            z-index: 5; 
+            max-width: 700px; 
+            margin: 0 auto;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            0% { transform: translateY(-30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* === ORNAMEN KETUPAT SVG (Anti-Error) === */
+        .ketupat {
+            position: absolute; top: -15px; z-index: 3;
+            width: 70px; height: 100px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg transform='rotate(45 50 50)'%3E%3Crect x='25' y='25' width='50' height='50' fill='%23f1c40f' stroke='%23186a4f' stroke-width='3' rx='4'/%3E%3Cline x1='25' y1='41.6' x2='75' y2='41.6' stroke='%23186a4f' stroke-width='3'/%3E%3Cline x1='25' y1='58.3' x2='75' y2='58.3' stroke='%23186a4f' stroke-width='3'/%3E%3Cline x1='41.6' y1='25' x2='41.6' y2='75' stroke='%23186a4f' stroke-width='3'/%3E%3Cline x1='58.3' y1='25' x2='58.3' y2='75' stroke='%23186a4f' stroke-width='3'/%3E%3C/g%3E%3Cline x1='50' y1='0' x2='50' y2='15' stroke='%23f1c40f' stroke-width='4'/%3E%3Cpath d='M50 85 Q 45 95 40 100 M50 85 Q 55 95 60 100' fill='none' stroke='%23f1c40f' stroke-width='4'/%3E%3C/svg%3E");
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            animation: swing 4s ease-in-out infinite alternate;
+            transform-origin: top center;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+        }
+        .ketupat.k-left { left: 5%; }
+        .ketupat.k-right { right: 5%; animation-delay: 1.5s; }
+
+        @keyframes swing { 
+            0% { transform: rotate(-15deg); } 
+            100% { transform: rotate(15deg); } 
+        }
+
+        /* === BINTANG KELAP-KELIP === */
+        .star {
+            position: absolute; background: var(--accent);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: twinkle 2.5s infinite alternate; z-index: 1;
+        }
+        .s1 { width: 25px; height: 25px; top: 20%; left: 20%; animation-duration: 2s; }
+        .s2 { width: 15px; height: 15px; top: 40%; right: 15%; animation-duration: 1.5s; }
+        .s3 { width: 30px; height: 30px; top: 50%; left: 10%; opacity: 0.6; animation-duration: 3s; }
+
+        @keyframes twinkle { 
+            0% { transform: scale(0.5) rotate(0deg); opacity: 0.2; } 
+            100% { transform: scale(1.3) rotate(25deg); opacity: 1; } 
+        }
+
+        /* Animasi awan bergerak */
+        .cloud {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50px;
+            animation: floatCloud 20s linear infinite;
+            z-index: 1;
+        }
+        .cloud1 { width: 100px; height: 40px; top: 15%; left: -100px; animation-duration: 25s; }
+        .cloud2 { width: 150px; height: 50px; top: 40%; left: -150px; animation-duration: 30s; animation-delay: 5s; }
+        .cloud3 { width: 120px; height: 45px; top: 65%; left: -120px; animation-duration: 28s; animation-delay: 10s; }
+
+        @keyframes floatCloud {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw + 200px)); }
+        }
+
+        /* === CONTAINER & NAVIGASI TAB === */
+        .container { 
+            max-width: 1100px; 
+            margin: -4rem auto 2rem; 
+            padding: 0 15px; 
+            position: relative; 
+            z-index: 10;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        .tabs {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+            background: var(--bg-card) !important;
+            padding: 15px; border-radius: 40px; box-shadow: var(--shadow);
+            margin-bottom: 30px; border: 2px solid rgba(241, 196, 15, 0.4);
+            animation: slideInFromBottom 0.8s ease-out;
+        }
+
+        @keyframes slideInFromBottom {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .tab-btn {
+            background: transparent; border: none; padding: 12px 20px;
+            font-size: 0.95rem; font-weight: 600; color: #7f8c8d; border-radius: 30px;
+            cursor: pointer; transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(10, 61, 46, 0.1);
+            transition: width 0.6s, height 0.6s, top 0.6s, left 0.6s;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+        .tab-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        .tab-btn span {
+            position: relative;
+            z-index: 1;
+        }
+        .tab-btn:hover { 
+            background: #f0f4f3; 
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+        .tab-btn.active { 
+            background: var(--primary); 
+            color: var(--text-light); 
+            box-shadow: 0 4px 12px rgba(10, 61, 46, 0.4);
+            transform: scale(1.05);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { 
+            display: block;
+            animation: slideUpFade 0.5s ease-out;
+        }
+
+        @keyframes slideUpFade { 
+            0% { opacity: 0; transform: translateY(20px); } 
+            100% { opacity: 1; transform: translateY(0); } 
+        }
+
+        /* === GRID KARTU KONTEN === */
+        .content-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 20px; 
+        }
+        .card {
+            background: var(--bg-card) !important;
+            color: var(--text-dark) !important;
+            border-radius: 20px; padding: 30px;
+            box-shadow: var(--shadow); border-bottom: 5px solid var(--accent);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            animation: cardAppear 0.6s ease-out backwards;
+        }
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes cardAppear {
+            0% { opacity: 0; transform: translateY(30px) scale(0.9); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(241, 196, 15, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+        }
+        .card:hover::before {
+            top: -100%;
+            right: -100%;
+        }
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border-bottom-color: var(--primary-light);
+        }
+        .card h3 { 
+            color: var(--primary) !important; 
+            font-size: 1.4rem; 
+            margin-bottom: 15px; 
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        .card h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--accent);
+            transition: width 0.4s ease;
+        }
+        .card:hover h3::after {
+            width: 100%;
+        }
+        .card p { 
+            color: #444 !important; 
+            text-align: justify; 
+            margin-bottom: 15px; 
+            font-size: 0.95rem; 
+            line-height: 1.8; 
+            position: relative;
+        }
+        
+        .card ul { list-style: none; }
+        .card ul li { 
+            margin-bottom: 15px; 
+            padding-left: 30px; 
+            position: relative; 
+            font-size: 0.95rem; 
+            text-align: justify; 
+            color: #444 !important; 
+            line-height: 1.7;
+            opacity: 0;
+            animation: listItemAppear 0.5s ease-out forwards;
+        }
+        .card ul li:nth-child(1) { animation-delay: 0.2s; }
+        .card ul li:nth-child(2) { animation-delay: 0.3s; }
+        .card ul li:nth-child(3) { animation-delay: 0.4s; }
+        .card ul li:nth-child(4) { animation-delay: 0.5s; }
+
+        @keyframes listItemAppear {
+            0% { opacity: 0; transform: translateX(-20px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        .card ul li::before { 
+            content: '⭐'; 
+            position: absolute; 
+            left: 0; 
+            top: 0px; 
+            font-size: 1.1rem;
+            animation: starRotate 3s ease-in-out infinite;
+        }
+
+        @keyframes starRotate {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+        }
+
+        .card ul li strong { 
+            color: var(--primary) !important; 
+            font-size: 1.05rem; 
+            display: block; 
+            margin-bottom: 3px; 
+        }
+
+        /* === TABEL DATA === */
+        .data-table-wrapper { 
+            background: var(--bg-card) !important; 
+            border-radius: 20px; 
+            overflow-x: auto; 
+            box-shadow: var(--shadow); 
+            margin-top: 10px; 
+            border: 1px solid #ddd;
+            animation: tableSlideIn 0.8s ease-out;
+        }
+
+        @keyframes tableSlideIn {
+            0% { opacity: 0; transform: translateX(-30px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        table { width: 100%; min-width: 500px; border-collapse: collapse; text-align: left; }
+        th, td { 
+            padding: 18px 20px; 
+            border-bottom: 1px solid #f0f0f0; 
+            color: var(--text-dark) !important;
+            position: relative;
+        }
+        th { 
+            background: var(--primary) !important; 
+            color: var(--text-light) !important; 
+            font-weight: 600; 
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+        th::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+        tr:last-child td { border-bottom: none; }
+        tbody tr:hover { 
+            background-color: #f8fafa; 
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        td strong { 
+            color: var(--primary-light) !important;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        tbody tr:hover td strong {
+            transform: scale(1.1);
+        }
+
+        /* === FOOTER === */
+        footer { 
+            text-align: center; 
+            padding: 25px; 
+            background: var(--primary) !important; 
+            color: rgba(255,255,255,0.8) !important; 
+            margin-top: 50px; 
+            font-size: 0.85rem; 
+            border-top: 4px solid var(--accent);
+            animation: footerSlideUp 1s ease-out;
+        }
+
+        @keyframes footerSlideUp {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Animasi scroll reveal */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === RESPONSIVE KHUSUS UNTUK HP (MOBILE) === */
+        @media (max-width: 600px) {
+            .splash-content h2 { font-size: 1.8rem; }
+            .splash-content .moon { font-size: 4rem; }
+            .splash-content p { font-size: 0.9rem; padding: 0 20px; }
+
+            .hero h1 { font-size: 1.8rem; line-height: 1.3; }
+            .hero p { font-size: 0.95rem; }
+            .hero { padding: 4rem 1rem 6rem; }
+            
+            .tabs {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                padding: 12px;
+                border-radius: 20px;
+            }
+            .tab-btn {
+                width: 100%;
+                padding: 10px 5px;
+                font-size: 0.85rem;
+                border-radius: 12px;
+            }
+            .tab-btn:last-child {
+                grid-column: 1 / -1; 
+            }
+            
+            .card { padding: 20px; }
+            .ketupat { width: 50px; top: -5px; }
+            .content-grid { grid-template-columns: 1fr; }
+            table { font-size: 0.85rem; }
+            th, td { padding: 12px 10px; }
+            
+            .cloud1, .cloud2, .cloud3 { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen">
+        <div class="splash-star"></div>
+        <div class="splash-star"></div>
+        <div class="splash-star"></div>
+        <div class="splash-star"></div>
+        <div class="splash-star"></div>
+        <div class="splash-star"></div>
+        
+        <div class="splash-content">
+            <div class="moon">🌙</div>
+            <h2>Marhaban Ya Ramadhan</h2>
+            <p>Nuansa Spiritual & Bermakna</p>
+        </div>
+    </div>
+
+    <header class="hero">
+        <div class="star s1"></div>
+        <div class="star s2"></div>
+        <div class="star s3"></div>
+        
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="cloud cloud3"></div>
+        
+        <div class="ketupat k-left"></div>
+        <div class="ketupat k-right"></div>
+        
+        <div class="hero-divider"></div>
+        
+        <h1>Ramadhan Cultural<br>Exchange</h1>
+        <p>Menjelajahi Jejak Tradisi, Budaya, dan Waktu Puasa di Berbagai Belahan Dunia</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab('indonesia')"><span>🇮🇩 Indonesia</span></button>
+            <button class="tab-btn" onclick="openTab('mesir')"><span>🇪🇬 Mesir</span></button>
+            <button class="tab-btn" onclick="openTab('turki')"><span>🇹🇷 Turki</span></button>
+            <button class="tab-btn" onclick="openTab('jepang')"><span>🇯🇵 Jepang</span></button>
+            <button class="tab-btn" onclick="openTab('data')"><span>Analisis Data</span></button>
+        </div>
+
+        <div id="indonesia" class="tab-content active">
+            <div class="content-grid">
+                <div class="card">
+                    <h3>Konteks Sejarah & Geografis</h3>
+                    <p>Tradisi Ramadhan di Indonesia tidak terlepas dari peran Wali Songo dan penyebar agama Islam awal yang menggunakan pendekatan budaya untuk berdakwah.
+ Penyatuan Tradisi Lokal: Banyak tradisi yang merupakan campuran antara ziarah kubur (tradisi lokal/Hindu-Budha) dengan doa bersama (Islam). Contoh: Tradisi Nyadran atau Megengan di Jawa.</p>
+                </div>
+                <div class="card">
+                    <h3>Tradisi Ramadhan di Indonesia</h3>
+                    <ul>
+                        <li><strong>Dugderan</strong>Festival kerakyatan yang menandai masuknya bulan puasa. Dugderan di Semarang diwarnai dengan karnaval dan penabuhan bedug. Sementara Megengan di Jawa Timur identik dengan berbagi kue apem.</li>
+                        <li><strong>Ngabuburit & Takjil</strong>Sebuah tradisi sosial di mana masyarakat keluar rumah pada sore hari untuk mencari makanan manis (takjil). Momen ini sangat efektif dalam mempererat interaksi sosial warga.</li>
+                        <li><strong>Pesantren Kilat</strong>Kegiatan edukasi keagamaan intensif yang dikhususkan bagi para pelajar di sekolah-sekolah selama bulan Ramadhan, bertujuan untuk memperdalam pemahaman Al-Quran.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="mesir" class="tab-content">
+            <div class="content-grid">
+                <div class="card">
+                    <h3>Konteks Sejarah & Geografis</h3>
+                    <p>Tradisi Ramadhan di Mesir memiliki akar sejarah yang sangat dalam, terutama dipengaruhi oleh masa Dinasti Fatimiyah, serta faktor geografis Lembah Nil yang membentuk kehidupan sosial masyarakatnya. Ramadhan di Mesir dikenal dengan atmosfer "kehidupan malam" di mana jalanan meriah, terang oleh lampion, dan kental dengan semangat komunitas.</p>
+                </div>
+                <div class="card">
+                    <h3>Tradisi Ramadhan di Mesir</h3>
+                    <ul>
+                        <li><strong>Fanoos (Lentera Ramadhan)</strong>Lentera hias dari logam dan kaca berwarna-warni yang digantung di setiap rumah hingga restoran. Tradisi ini berawal dari era Fatimiyah dan kini menjadi simbol universal Ramadhan.</li>
+                        <li><strong>Maidatur Rahman (Meja Tuhan)</strong>Tradisi mendirikan tenda dan meja panjang di pinggir jalan untuk menyediakan makanan berbuka puasa gratis secara masal bagi fakir miskin atau musafir.makanan gratis yang meliputi: sup lentil, ful medames (semur kacang fava), daging panggang, sayuran isi, dan nasi, ditambah hidangan manis favorit seperti qatayef dan makanan penutup Om Ali</li>
+                        <li><strong>Mesaharti (Pembanggil Sahur)</strong>Profesi  Tradisi ini diyakini dimulai sejak abad ke-9 (sekitar 843 M), di mana seorang pria berjalan menyusuri jalanan membawa drum (tabla) untuk membangunkan warga untuk sahur. Meskipun ada alarm modern, tradisi ini tetap bertahan sebagai bagian dari warisan budaya.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="turki" class="tab-content">
+            <div class="content-grid">
+                <div class="card">
+                    <h3>Konteks Sejarah & Geografis </h3>
+                    <p>Tradisi Ramadan di Turki merupakan perpaduan unik antara spiritualitas Islam dan warisan budaya Kesultanan Utsmaniyah (Ottoman) yang mengutamakan semangat berbagi, kebersamaan sosial, dan kemeriahan malam. Secara geografis, tradisi ini berpusat di kota-kota besar seperti Istanbul, Ankara, dan Bursa.</p>
+                </div>
+                <div class="card">
+                    <h3>Tradisi Ramadhan di Turki</h3>
+                    <ul>
+                        <li><strong>Seni Mahya</strong>Seni merangkai ribuan lampu pijar di antara dua menara masjid besar. Lampu-lampu ini membentuk kaligrafi raksasa atau pesan moral di langit malam.</li>
+                        <li><strong>Ramazan Davulcusu</strong>Penabuh drum sahur yang berkeliling menggunakan pakaian tradisional era Ottoman sambil menyanyikan mani (puisi tradisional Turki).</li>
+                        <li><strong>Pide & Güllaç</strong>Pide adalah roti hangat berlapis wijen, sementara Güllaç adalah makanan penutup istimewa khas Ramadhan dari lembaran adonan direndam susu manis dan air mawar.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="jepang" class="tab-content">
+            <div class="content-grid">
+                <div class="card">
+                    <h3>Konteks Sejarah & Geografis</h3>
+                    <p>Tradisi Ramadhan di Jepang merupakan perpaduan antara ketaatan beribadah di tengah minoritas Muslim dan adaptasi budaya terhadap lingkungan kerja serta cuaca setempat. Islam di Jepang berakar dari perdagangan pada awal abad ke-20 dan tumbuh signifikan melalui imigrasi dan konversi, dengan populasi Muslim diperkirakan mencapai 420.000 jiwa pada akhir 2024. </p>
+                </div>
+                <div class="card">
+                    <h3>Tradisi Ramadhan di Jepang</h3>
+                    <ul>
+                        <li><strong>Sahur/Buka Bersama WNI</strong>Komunitas Indonesia di Jepang sering mengadakan acara Sahur/Buka bersama untuk mengobati kerinduan kampung halaman dan menambah ikatan islam dengan muslim di jepang.</li>
+                        <li><strong>Teknologi Pendeteksi Halal</strong>Muslim di Jepang sangat bergantung pada aplikasi ponsel pintar untuk mengecek komposisi bahan secara instan saat berbelanja di minimarket.</li>
+                        <li><strong>Makanan Khas Jepang</strong>Sushi: Pilihan dengan bahan seperti ikan tuna, salmon, atau udang yang halal, tanpa tambahan bahan haram seperti mayones berbahan dasar alkohol atau bahan laut yang tidak diizinkan.
+  Tempura: Sayuran atau udang yang dibalut adonan tepung dan digoreng dengan minyak halal.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="data" class="tab-content">
+            <div class="data-table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Negara</th>
+                            <th>Zona Waktu</th>
+                            <th>Iklim</th>
+                            <th>Durasi Puasa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>🇮🇩 Indonesia</strong></td>
+                            <td>GMT +7 s/d +9</td>
+                            <td>Tropis</td>
+                            <td>~ 13 Jam</td>
+                        </tr>
+                        <tr>
+                            <td><strong>🇪🇬 Mesir</strong></td>
+                            <td>GMT +2</td>
+                            <td>Gurun Kering</td>
+                            <td>13 - 15 Jam</td>
+                        </tr>
+                        <tr>
+                            <td><strong>🇹🇷 Turki</strong></td>
+                            <td>GMT +3</td>
+                            <td>Subtropis</td>
+                            <td>14 - 17 Jam</td>
+                        </tr>
+                        <tr>
+                            <td><strong>🇯🇵 Jepang</strong></td>
+                            <td>GMT +9</td>
+                            <td>4 Musim</td>
+                            <td>12 - 17 Jam</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>Projek Kokurikuler Kelas X &copy; 2026 | Didesain oleh Tim Kelompok 4</p>
+    </footer>
+
+    <script>
+        // Fungsi untuk berpindah tab
+        function openTab(tabName) {
+            let contents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove("active");
+            }
+            
+            let buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            event.currentTarget.classList.add("active");
+        }
+
+        // Fungsi untuk menghilangkan Splash Screen setelah 3 detik
+        document.addEventListener('DOMContentLoaded', function() {
+            const splashScreen = document.getElementById('splash-screen');
+            
+            setTimeout(function() {
+                splashScreen.classList.add('hide-splash');
+            }, 3000);
+        });
+
+        // Scroll reveal animation
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.scroll-reveal');
+            
+            for (let i = 0; i < reveals.length; i++) {
+                const windowHeight = window.innerHeight;
+                const elementTop = reveals[i].getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll(); // Trigger on load
+    </script>
+
+</body>
+</html>
