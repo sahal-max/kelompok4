@@ -6,6 +6,7 @@
     <meta name="color-scheme" content="light"> 
     <title>Ramadhan Cultural Exchange | SMKN 1 Wonosobo</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
     
     <style>
         /* === TEMA WARNA MODERN === */
@@ -18,21 +19,18 @@
             --bg-main: #eef2f1;
             --bg-card: #ffffff;
             --shadow: 0 10px 30px rgba(0,0,0,0.08);
-            --transition: all 0.3s ease;
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         
-        /* Memaksa background tetap terang meski HP dalam mode gelap */
         body { background-color: var(--bg-main) !important; color: var(--text-dark) !important; line-height: 1.7; overflow-x: hidden; }
 
-        /* === SPLASH SCREEN RAMADHAN === */
+        /* === SPLASH SCREEN === */
         #splash-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
+            top: 0; left: 0;
+            width: 100%; height: 100vh;
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             z-index: 9999;
             display: flex;
@@ -40,40 +38,45 @@
             align-items: center;
             text-align: center;
             color: var(--text-light);
-            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.2s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
         }
 
-        /* Animasi partikel bintang di splash screen */
         .splash-star {
             position: absolute;
             background: var(--accent);
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            animation: floatStars 6s infinite ease-in-out;
+            animation: floatStars 7s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
+            will-change: transform, opacity;
         }
         .splash-star:nth-child(1) { width: 20px; height: 20px; top: 10%; left: 15%; animation-delay: 0s; }
-        .splash-star:nth-child(2) { width: 15px; height: 15px; top: 20%; right: 20%; animation-delay: 1s; }
-        .splash-star:nth-child(3) { width: 25px; height: 25px; top: 70%; left: 10%; animation-delay: 2s; }
-        .splash-star:nth-child(4) { width: 18px; height: 18px; top: 75%; right: 15%; animation-delay: 1.5s; }
-        .splash-star:nth-child(5) { width: 12px; height: 12px; top: 30%; left: 80%; animation-delay: 0.5s; }
-        .splash-star:nth-child(6) { width: 22px; height: 22px; top: 60%; right: 25%; animation-delay: 2.5s; }
+        .splash-star:nth-child(2) { width: 15px; height: 15px; top: 20%; right: 20%; animation-delay: 1.2s; }
+        .splash-star:nth-child(3) { width: 25px; height: 25px; top: 70%; left: 10%; animation-delay: 2.4s; }
+        .splash-star:nth-child(4) { width: 18px; height: 18px; top: 75%; right: 15%; animation-delay: 0.8s; }
+        .splash-star:nth-child(5) { width: 12px; height: 12px; top: 30%; left: 80%; animation-delay: 1.8s; }
+        .splash-star:nth-child(6) { width: 22px; height: 22px; top: 60%; right: 25%; animation-delay: 3s; }
 
         @keyframes floatStars {
-            0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
-            50% { transform: translateY(-30px) scale(1.3); opacity: 1; }
+            0%   { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.2; }
+            25%  { opacity: 0.8; }
+            50%  { transform: translateY(-35px) scale(1.35) rotate(15deg); opacity: 1; }
+            75%  { opacity: 0.8; }
+            100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.2; }
         }
 
         .splash-content {
-            animation: popUp 1s ease-out forwards;
+            animation: popUp 1.1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             position: relative;
             z-index: 2;
+            will-change: transform, opacity;
         }
 
         .splash-content .moon {
             font-size: 5rem;
             margin-bottom: 15px;
-            animation: pulseGlow 2s infinite alternate;
+            animation: pulseGlow 3s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95) alternate;
             display: inline-block;
+            will-change: transform, filter;
         }
 
         .splash-content h2 {
@@ -82,36 +85,37 @@
             margin-bottom: 10px;
             text-shadow: 2px 4px 10px rgba(0,0,0,0.3);
             letter-spacing: 1px;
-            animation: slideInFromTop 1s ease-out;
+            animation: slideInFromTop 1s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .splash-content p {
             font-size: 1.1rem;
             opacity: 0.9;
-            animation: fadeInUp 1.2s ease-out;
+            animation: fadeInUp 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         @keyframes popUp {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+            0%   { transform: scale(0.75) translateY(20px); opacity: 0; }
+            60%  { transform: scale(1.04) translateY(-4px); opacity: 1; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
         }
 
         @keyframes pulseGlow {
-            0% { transform: scale(1) rotate(-10deg); filter: drop-shadow(0 0 10px rgba(241, 196, 15, 0.4)); }
-            100% { transform: scale(1.1) rotate(10deg); filter: drop-shadow(0 0 30px rgba(241, 196, 15, 1)); }
+            0%   { transform: scale(1) rotate(-8deg); filter: drop-shadow(0 0 8px rgba(241,196,15,0.3)); }
+            100% { transform: scale(1.12) rotate(8deg); filter: drop-shadow(0 0 28px rgba(241,196,15,0.9)); }
         }
 
         @keyframes slideInFromTop {
-            0% { transform: translateY(-50px); opacity: 0; }
+            0%   { transform: translateY(-40px); opacity: 0; }
+            60%  { transform: translateY(4px); opacity: 1; }
             100% { transform: translateY(0); opacity: 1; }
         }
 
         @keyframes fadeInUp {
-            0% { transform: translateY(30px); opacity: 0; }
+            0%   { transform: translateY(25px); opacity: 0; }
             100% { transform: translateY(0); opacity: 0.9; }
         }
 
-        /* Class untuk menyembunyikan splash screen */
         .hide-splash {
             opacity: 0;
             visibility: hidden;
@@ -133,102 +137,102 @@
             position: absolute; bottom: 0; left: 0; width: 100%; height: 80px;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23eef2f1' fill-opacity='1' d='M0,160L48,170.7C96,181,192,203,288,197.3C384,192,480,160,576,160C672,160,768,192,864,213.3C960,235,1056,245,1152,229.3C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
             background-size: cover; background-position: center bottom; z-index: 2;
-            animation: waveMove 3s ease-in-out infinite;
+            animation: waveMove 5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+            will-change: transform;
         }
 
         @keyframes waveMove {
             0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(-10px); }
+            50%       { transform: translateX(-12px); }
         }
 
         .hero h1 { 
-            font-size: 2.8rem; 
-            font-weight: 700; 
+            font-size: 2.8rem; font-weight: 700; 
             text-shadow: 2px 4px 6px rgba(0,0,0,0.4); 
             margin-bottom: 15px; 
-            position: relative; 
-            z-index: 5;
-            animation: fadeInDown 1s ease-out;
+            position: relative; z-index: 5;
+            animation: fadeInDown 1s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .hero p { 
-            font-size: 1.1rem; 
-            font-weight: 300; 
-            opacity: 0.9; 
-            position: relative; 
-            z-index: 5; 
-            max-width: 700px; 
-            margin: 0 auto;
-            animation: fadeInUp 1.2s ease-out;
+            font-size: 1.1rem; font-weight: 300; opacity: 0.9; 
+            position: relative; z-index: 5; 
+            max-width: 700px; margin: 0 auto;
+            animation: fadeInUp 1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         @keyframes fadeInDown {
-            0% { transform: translateY(-30px); opacity: 0; }
+            0%   { transform: translateY(-35px); opacity: 0; }
+            60%  { transform: translateY(4px); opacity: 1; }
             100% { transform: translateY(0); opacity: 1; }
         }
 
-        /* === ORNAMEN KETUPAT SVG (Anti-Error) === */
+        /* === ORNAMEN KETUPAT === */
         .ketupat {
             position: absolute; top: -15px; z-index: 3;
             width: 70px; height: 100px;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg transform='rotate(45 50 50)'%3E%3Crect x='25' y='25' width='50' height='50' fill='%23f1c40f' stroke='%23186a4f' stroke-width='3' rx='4'/%3E%3Cline x1='25' y1='41.6' x2='75' y2='41.6' stroke='%23186a4f' stroke-width='3'/%3E%3Cline x1='25' y1='58.3' x2='75' y2='58.3' stroke='%23186a4f' stroke-width='3'/%3E%3Cline x1='41.6' y1='25' x2='41.6' y2='75' stroke='%23186a4f' stroke-width='3'/%3E%3Cline x1='58.3' y1='25' x2='58.3' y2='75' stroke='%23186a4f' stroke-width='3'/%3E%3C/g%3E%3Cline x1='50' y1='0' x2='50' y2='15' stroke='%23f1c40f' stroke-width='4'/%3E%3Cpath d='M50 85 Q 45 95 40 100 M50 85 Q 55 95 60 100' fill='none' stroke='%23f1c40f' stroke-width='4'/%3E%3C/svg%3E");
             background-size: contain; background-repeat: no-repeat; background-position: center;
-            animation: swing 4s ease-in-out infinite alternate;
+            animation: swing 5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
             transform-origin: top center;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+            will-change: transform;
         }
         .ketupat.k-left { left: 5%; }
-        .ketupat.k-right { right: 5%; animation-delay: 1.5s; }
+        .ketupat.k-right { right: 5%; animation-delay: 2s; }
 
         @keyframes swing { 
-            0% { transform: rotate(-15deg); } 
-            100% { transform: rotate(15deg); } 
+            0%   { transform: rotate(-12deg); } 
+            100% { transform: rotate(12deg); } 
         }
 
         /* === BINTANG KELAP-KELIP === */
         .star {
             position: absolute; background: var(--accent);
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            animation: twinkle 2.5s infinite alternate; z-index: 1;
+            animation: twinkle 3s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95) alternate;
+            z-index: 1;
+            will-change: transform, opacity;
         }
-        .s1 { width: 25px; height: 25px; top: 20%; left: 20%; animation-duration: 2s; }
-        .s2 { width: 15px; height: 15px; top: 40%; right: 15%; animation-duration: 1.5s; }
-        .s3 { width: 30px; height: 30px; top: 50%; left: 10%; opacity: 0.6; animation-duration: 3s; }
+        .s1 { width: 25px; height: 25px; top: 20%; left: 20%; animation-duration: 2.5s; }
+        .s2 { width: 15px; height: 15px; top: 40%; right: 15%; animation-duration: 2s; animation-delay: 0.5s; }
+        .s3 { width: 30px; height: 30px; top: 50%; left: 10%; opacity: 0.6; animation-duration: 3.5s; animation-delay: 1s; }
 
         @keyframes twinkle { 
-            0% { transform: scale(0.5) rotate(0deg); opacity: 0.2; } 
-            100% { transform: scale(1.3) rotate(25deg); opacity: 1; } 
+            0%   { transform: scale(0.5) rotate(0deg); opacity: 0.15; } 
+            100% { transform: scale(1.3) rotate(20deg); opacity: 1; } 
         }
 
-        /* Animasi awan bergerak */
+        /* Animasi awan */
         .cloud {
             position: absolute;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.12);
             border-radius: 50px;
-            animation: floatCloud 20s linear infinite;
+            animation: floatCloud 25s linear infinite;
             z-index: 1;
+            will-change: transform;
         }
-        .cloud1 { width: 100px; height: 40px; top: 15%; left: -100px; animation-duration: 25s; }
-        .cloud2 { width: 150px; height: 50px; top: 40%; left: -150px; animation-duration: 30s; animation-delay: 5s; }
-        .cloud3 { width: 120px; height: 45px; top: 65%; left: -120px; animation-duration: 28s; animation-delay: 10s; }
+        .cloud1 { width: 100px; height: 40px; top: 15%; left: -100px; animation-duration: 28s; }
+        .cloud2 { width: 150px; height: 50px; top: 40%; left: -150px; animation-duration: 34s; animation-delay: 5s; }
+        .cloud3 { width: 120px; height: 45px; top: 65%; left: -120px; animation-duration: 31s; animation-delay: 12s; }
 
         @keyframes floatCloud {
-            0% { transform: translateX(0); }
+            0%   { transform: translateX(0); }
             100% { transform: translateX(calc(100vw + 200px)); }
         }
 
-        /* === CONTAINER & NAVIGASI TAB === */
+        /* === CONTAINER === */
         .container { 
             max-width: 1100px; 
             margin: -4rem auto 2rem; 
             padding: 0 15px; 
             position: relative; 
             z-index: 10;
-            animation: fadeIn 1s ease-out;
+            animation: fadeIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+            0%   { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
         
         .tabs {
@@ -236,66 +240,58 @@
             background: var(--bg-card) !important;
             padding: 15px; border-radius: 40px; box-shadow: var(--shadow);
             margin-bottom: 30px; border: 2px solid rgba(241, 196, 15, 0.4);
-            animation: slideInFromBottom 0.8s ease-out;
+            animation: slideInFromBottom 1s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         @keyframes slideInFromBottom {
-            0% { transform: translateY(50px); opacity: 0; }
+            0%   { transform: translateY(40px); opacity: 0; }
+            60%  { transform: translateY(-5px); opacity: 1; }
             100% { transform: translateY(0); opacity: 1; }
         }
 
         .tab-btn {
             background: transparent; border: none; padding: 12px 20px;
             font-size: 0.95rem; font-weight: 600; color: #7f8c8d; border-radius: 30px;
-            cursor: pointer; transition: var(--transition);
-            position: relative;
-            overflow: hidden;
+            cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative; overflow: hidden;
         }
         .tab-btn::before {
             content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
+            position: absolute; top: 50%; left: 50%;
+            width: 0; height: 0;
             border-radius: 50%;
-            background: rgba(10, 61, 46, 0.1);
-            transition: width 0.6s, height 0.6s, top 0.6s, left 0.6s;
+            background: rgba(10, 61, 46, 0.08);
+            transition: width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        height 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        top 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             transform: translate(-50%, -50%);
             z-index: 0;
         }
-        .tab-btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-        .tab-btn span {
-            position: relative;
-            z-index: 1;
-        }
+        .tab-btn:hover::before { width: 300px; height: 300px; }
+        .tab-btn span { position: relative; z-index: 1; }
         .tab-btn:hover { 
-            background: #f0f4f3; 
-            color: var(--primary);
+            background: #f0f4f3; color: var(--primary);
             transform: translateY(-3px);
         }
         .tab-btn.active { 
-            background: var(--primary); 
-            color: var(--text-light); 
-            box-shadow: 0 4px 12px rgba(10, 61, 46, 0.4);
+            background: var(--primary); color: var(--text-light); 
+            box-shadow: 0 6px 20px rgba(10, 61, 46, 0.35);
             transform: scale(1.05);
         }
 
         .tab-content { display: none; }
         .tab-content.active { 
             display: block;
-            animation: slideUpFade 0.5s ease-out;
+            animation: slideUpFade 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         @keyframes slideUpFade { 
-            0% { opacity: 0; transform: translateY(20px); } 
+            0%   { opacity: 0; transform: translateY(18px); } 
             100% { opacity: 1; transform: translateY(0); } 
         }
 
-        /* === GRID KARTU KONTEN === */
+        /* === KARTU === */
         .content-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
@@ -306,39 +302,36 @@
             color: var(--text-dark) !important;
             border-radius: 20px; padding: 30px;
             box-shadow: var(--shadow); border-bottom: 5px solid var(--accent);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-            animation: cardAppear 0.6s ease-out backwards;
+            transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        box-shadow 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        border-bottom-color 0.45s ease;
+            position: relative; overflow: hidden;
+            animation: cardAppear 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+            will-change: transform;
         }
-        .card:nth-child(1) { animation-delay: 0.1s; }
-        .card:nth-child(2) { animation-delay: 0.2s; }
-        .card:nth-child(3) { animation-delay: 0.3s; }
-        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(1) { animation-delay: 0.05s; }
+        .card:nth-child(2) { animation-delay: 0.15s; }
+        .card:nth-child(3) { animation-delay: 0.25s; }
+        .card:nth-child(4) { animation-delay: 0.35s; }
 
         @keyframes cardAppear {
-            0% { opacity: 0; transform: translateY(30px) scale(0.9); }
+            0%   { opacity: 0; transform: translateY(28px) scale(0.95); }
+            60%  { transform: translateY(-4px) scale(1.01); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .card::before {
             content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(241, 196, 15, 0.1), transparent);
+            position: absolute; top: -50%; right: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(241,196,15,0.08), transparent);
             transform: rotate(45deg);
-            transition: all 0.6s;
+            transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        .card:hover::before {
-            top: -100%;
-            right: -100%;
-        }
+        .card:hover::before { top: -100%; right: -100%; }
         .card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            transform: translateY(-8px) scale(1.015);
+            box-shadow: 0 22px 50px rgba(0,0,0,0.13);
             border-bottom-color: var(--primary-light);
         }
         .card h3 { 
@@ -352,12 +345,10 @@
         .card h3::after {
             content: '';
             position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 3px;
+            bottom: -5px; left: 0;
+            width: 0; height: 3px;
             background: var(--accent);
-            transition: width 0.4s ease;
+            transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         .card:hover h3::after {
             width: 100%;
@@ -381,25 +372,25 @@
             color: #444 !important; 
             line-height: 1.7;
             opacity: 0;
-            animation: listItemAppear 0.5s ease-out forwards;
+            animation: listItemAppear 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
-        .card ul li:nth-child(1) { animation-delay: 0.2s; }
-        .card ul li:nth-child(2) { animation-delay: 0.3s; }
-        .card ul li:nth-child(3) { animation-delay: 0.4s; }
-        .card ul li:nth-child(4) { animation-delay: 0.5s; }
+        .card ul li:nth-child(1) { animation-delay: 0.15s; }
+        .card ul li:nth-child(2) { animation-delay: 0.28s; }
+        .card ul li:nth-child(3) { animation-delay: 0.41s; }
+        .card ul li:nth-child(4) { animation-delay: 0.54s; }
 
         @keyframes listItemAppear {
-            0% { opacity: 0; transform: translateX(-20px); }
+            0%   { opacity: 0; transform: translateX(-16px); }
+            60%  { transform: translateX(3px); }
             100% { opacity: 1; transform: translateX(0); }
         }
 
         .card ul li::before { 
             content: '⭐'; 
             position: absolute; 
-            left: 0; 
-            top: 0px; 
+            left: 0; top: 0px; 
             font-size: 1.1rem;
-            animation: starRotate 3s ease-in-out infinite;
+            animation: starRotate 4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
         }
 
         @keyframes starRotate {
@@ -507,7 +498,286 @@
             transform: translateY(0);
         }
 
-        /* === RESPONSIVE KHUSUS UNTUK HP (MOBILE) === */
+        /* === GRAFIK & DIAGRAM === */
+        .chart-section-title {
+            color: var(--primary);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        .charts-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        .chart-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--accent);
+            transition: var(--transition);
+        }
+        .chart-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+        .chart-card h4 {
+            color: var(--primary);
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .chart-card canvas { max-height: 300px; }
+        .chart-card-wide { grid-column: 1 / -1; }
+
+        /* Stat Row */
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-box {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-bottom: 4px solid var(--accent);
+            transition: var(--transition);
+        }
+        .stat-box:hover { transform: translateY(-5px); }
+        .stat-box .stat-icon { font-size: 2rem; margin-bottom: 8px; }
+        .stat-box .stat-number { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+        .stat-box .stat-label { font-size: 0.8rem; color: #888; margin-top: 4px; }
+
+        /* Gauge Cards */
+        .gauge-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+        .gauge-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 20px 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .gauge-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+        .gauge-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 4px;
+        }
+        .gauge-card.gc-id::before { background: #27ae60; }
+        .gauge-card.gc-eg::before { background: #e67e22; }
+        .gauge-card.gc-tr::before { background: #2980b9; }
+        .gauge-card.gc-th::before { background: #c0392b; }
+        .gauge-flag { margin-bottom: 8px; }
+        .gauge-flag svg { display: inline-block; border-radius: 3px; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+        .gauge-name { font-size: 0.9rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; }
+        .gauge-wrap { position: relative; width: 110px; height: 60px; margin: 0 auto 10px; }
+        .gauge-wrap canvas { display: block; }
+        .gauge-value {
+            position: absolute; bottom: 2px; left: 0; right: 0;
+            text-align: center; font-size: 1.05rem; font-weight: 700;
+        }
+        .gauge-sub { font-size: 0.72rem; color: #888; }
+
+        /* Horizontal Range Bar */
+        .hbar-wrap { padding: 10px 0; }
+        .hbar-row { display: flex; align-items: center; margin-bottom: 20px; gap: 10px; }
+        .hbar-label { width: 75px; font-size: 0.85rem; font-weight: 600; color: var(--primary); text-align: right; flex-shrink: 0; }
+        .hbar-track { flex: 1; height: 22px; background: #f0f0f0; border-radius: 11px; position: relative; overflow: visible; }
+        .hbar-range {
+            position: absolute; top: 0; height: 100%;
+            border-radius: 11px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.72rem; font-weight: 700; color: #fff;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: width 1.2s ease, left 1.2s ease;
+        }
+        .hbar-avg {
+            position: absolute; top: -4px; height: 30px; width: 3px;
+            background: #2c3e50; border-radius: 2px; z-index: 2;
+        }
+        .hbar-avg::after {
+            content: attr(data-label);
+            position: absolute; top: -18px; left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.65rem; font-weight: 700; color: #2c3e50;
+            white-space: nowrap;
+            background: #fff; padding: 1px 4px; border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        }
+        .hbar-scale { display: flex; justify-content: space-between; padding: 4px 0 0; font-size: 0.65rem; color: #aaa; }
+
+        @media (max-width: 600px) {
+            .gauge-grid { grid-template-columns: repeat(2, 1fr); }
+            .charts-grid-3 { grid-template-columns: 1fr; }
+        }
+    
+        /* === LETAK ASTRONOMIS === */
+        .astro-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .astro-item {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: #fff;
+            text-align: center;
+        }
+        .astro-item .astro-label { font-size: 0.72rem; opacity: 0.8; margin-bottom: 4px; letter-spacing: 0.5px; text-transform: uppercase; }
+        .astro-item .astro-val { font-size: 1rem; font-weight: 700; color: var(--accent); }
+        .astro-desc { font-size: 0.88rem; color: #555; margin-top: 10px; line-height: 1.7; }
+
+        /* === PENGARUH MUSIM === */
+        .musim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .musim-card {
+            border-radius: 12px;
+            padding: 14px;
+            border-left: 4px solid var(--accent);
+            background: #f8fafa;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .musim-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+        .musim-card .musim-icon { font-size: 1.6rem; margin-bottom: 6px; }
+        .musim-card .musim-name { font-size: 0.85rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+        .musim-card .musim-text { font-size: 0.8rem; color: #555; line-height: 1.6; }
+
+        /* === MENU BERBUKA & SAHUR === */
+        .menu-section { margin-top: 10px; }
+        .menu-section h4 { font-size: 0.9rem; font-weight: 700; color: var(--primary); margin: 12px 0 8px; display: flex; align-items: center; gap: 6px; }
+        .menu-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+        .menu-chip {
+            background: var(--bg-main);
+            border: 1.5px solid var(--accent);
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 0.82rem;
+            color: var(--primary);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .menu-chip:hover { background: var(--accent); color: var(--primary); transform: scale(1.05); }
+        .menu-divider { border: none; border-top: 1px dashed #e0e0e0; margin: 12px 0; }
+
+        /* === TRADISI TIMELINE === */
+        .tradisi-timeline { margin-top: 10px; position: relative; padding-left: 20px; }
+        .tradisi-timeline::before { content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent), var(--primary-light)); border-radius: 2px; }
+        .tradisi-phase { margin-bottom: 20px; position: relative; }
+        .tradisi-phase::before {
+            content: '';
+            position: absolute;
+            left: -17px;
+            top: 6px;
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 0 3px rgba(241,196,15,0.3);
+        }
+        .tradisi-phase-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--primary-light);
+            margin-bottom: 5px;
+        }
+        .tradisi-phase-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 6px;
+        }
+        .tradisi-phase-body { font-size: 0.85rem; color: #555; line-height: 1.7; }
+        .tradisi-tag {
+            display: inline-block;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 0.72rem;
+            margin: 3px 3px 0 0;
+            font-weight: 600;
+        }
+
+        /* === SELISIH PUASA TABLE === */
+        .selisih-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .selisih-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-top: 4px solid;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .selisih-card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.1); transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .selisih-card.sc-id { border-color: #27ae60; }
+        .selisih-card.sc-eg { border-color: #e67e22; }
+        .selisih-card.sc-tr { border-color: #2980b9; }
+        .selisih-card.sc-th { border-color: #c0392b; }
+        .selisih-card .sc-flag { font-size: 2rem; margin-bottom: 8px; }
+        .selisih-card .sc-name { font-size: 0.85rem; font-weight: 700; color: var(--primary); margin-bottom: 10px; }
+        .selisih-card .sc-jam { font-size: 1.8rem; font-weight: 700; }
+        .selisih-card .sc-diff { font-size: 0.8rem; color: #888; margin-top: 4px; }
+        .selisih-card.sc-id .sc-jam { color: #27ae60; }
+        .selisih-card.sc-eg .sc-jam { color: #e67e22; }
+        .selisih-card.sc-tr .sc-jam { color: #2980b9; }
+        .selisih-card.sc-th .sc-jam { color: #c0392b; }
+        .selisih-matrix {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin-top: 10px;
+        }
+        .selisih-matrix th { background: var(--primary) !important; color: #fff !important; padding: 12px 15px; text-align: center; }
+        .selisih-matrix td { padding: 12px 15px; text-align: center; border-bottom: 1px solid #f0f0f0; }
+        .selisih-matrix tr:hover { background: #f8fafa; }
+        .badge-plus { background: #e74c3c; color: #fff; border-radius: 4px; padding: 2px 7px; font-size: 0.78rem; font-weight: 700; }
+        .badge-minus { background: #27ae60; color: #fff; border-radius: 4px; padding: 2px 7px; font-size: 0.78rem; font-weight: 700; }
+        .badge-same { background: #95a5a6; color: #fff; border-radius: 4px; padding: 2px 7px; font-size: 0.78rem; font-weight: 700; }
+
+        @media (max-width: 600px) {
+            .astro-box, .musim-grid { grid-template-columns: 1fr; }
+        }
+
         @media (max-width: 600px) {
             .splash-content h2 { font-size: 1.8rem; }
             .splash-content .moon { font-size: 4rem; }
@@ -582,10 +852,10 @@
     <div class="container">
         
         <div class="tabs">
-             <button class="tab-btn active" onclick="openTab('indonesia')"><span>🇮🇩 Indonesia</span></button>
-             <button class="tab-btn" onclick="openTab('mesir')"><span>🇪🇬 Mesir</span></button>
-             <button class="tab-btn" onclick="openTab('turki')"><span>🇹🇷 Turki</span></button>
-             <button class="tab-btn" onclick="openTab('jepang')"><span>🇯🇵 Jepang</span></button>
+             <button class="tab-btn active" onclick="openTab('indonesia')"><span><img src="https://flagcdn.com/w20/id.png" srcset="https://flagcdn.com/w40/id.png 2x" width="20" height="14" alt="Indonesia" style="vertical-align:middle;border-radius:2px;margin-right:4px;"> Indonesia</span></button>
+             <button class="tab-btn" onclick="openTab('mesir')"><span><img src="https://flagcdn.com/w20/eg.png" srcset="https://flagcdn.com/w40/eg.png 2x" width="20" height="14" alt="Mesir" style="vertical-align:middle;border-radius:2px;margin-right:4px;"> Mesir</span></button>
+             <button class="tab-btn" onclick="openTab('turki')"><span><img src="https://flagcdn.com/w20/tr.png" srcset="https://flagcdn.com/w40/tr.png 2x" width="20" height="14" alt="Turki" style="vertical-align:middle;border-radius:2px;margin-right:4px;"> Turki</span></button>
+             <button class="tab-btn" onclick="openTab('thailand')"><span><img src="https://flagcdn.com/w20/th.png" srcset="https://flagcdn.com/w40/th.png 2x" width="20" height="14" alt="Thailand" style="vertical-align:middle;border-radius:2px;margin-right:4px;"> Thailand</span></button>
              <button class="tab-btn" onclick="openTab('data')"><span>Analisis Data</span></button>
         </div>
 
@@ -593,16 +863,114 @@
             <div class="content-grid">
                 <div class="card">
                     <h3>Konteks Sejarah & Geografis</h3>
-                    <p>Tradisi Ramadhan di Indonesia tidak terlepas dari peran Wali Songo dan penyebar agama Islam awal yang menggunakan pendekatan budaya untuk berdakwah.
- Penyatuan Tradisi Lokal: Banyak tradisi yang merupakan campuran antara ziarah kubur (tradisi lokal/Hindu-Budha) dengan doa bersama (Islam). Contoh: Tradisi Nyadran atau Megengan di Jawa.</p>
+                    <p>Tradisi Ramadhan di Indonesia tidak terlepas dari peran Wali Songo dan para penyebar agama Islam awal yang menggunakan pendekatan budaya dalam berdakwah. Banyak tradisi merupakan perpaduan antara ziarah kubur (tradisi lokal Hindu-Buddha) dengan doa bersama (Islam), seperti tradisi Nyadran atau Megengan di Jawa.</p>
+                </div>
+                <div class="card">
+                    <h3>Letak Astronomis</h3>
+                    <div class="astro-box">
+                        <div class="astro-item">
+                            <div class="astro-label">Lintang</div>
+                            <div class="astro-val">6°LU – 11°LS</div>
+                        </div>
+                        <div class="astro-item">
+                            <div class="astro-label">Bujur</div>
+                            <div class="astro-val">95°BT – 141°BT</div>
+                        </div>
+                        <div class="astro-item">
+                            <div class="astro-label">Luas Wilayah</div>
+                            <div class="astro-val">1.904.569 km²</div>
+                        </div>
+                        <div class="astro-item">
+                            <div class="astro-label">Posisi</div>
+                            <div class="astro-val">Ekuator</div>
+                        </div>
+                    </div>
+                    <p class="astro-desc">Indonesia terletak di antara 2 samudra (Hindia & Pasifik) dan 2 benua (Asia & Australia). Posisinya tepat di garis khatulistiwa menyebabkan panjang siang hampir selalu 12 jam sepanjang tahun, sehingga durasi puasa sangat stabil.</p>
+                </div>
+                <div class="card">
+                    <h3>Pengaruh Musim terhadap Puasa</h3>
+                    <div class="musim-grid">
+                        <div class="musim-card">
+                                                        <div class="musim-name">Musim Kemarau</div>
+                            <div class="musim-text">Suhu 30–35°C. Tantangan dehidrasi meningkat. Masyarakat lebih memilih takjil dingin seperti es buah dan kolak.</div>
+                        </div>
+                        <div class="musim-card">
+                                                        <div class="musim-name">Musim Hujan</div>
+                            <div class="musim-text">Suhu 24–29°C. Cuaca lebih sejuk memudahkan puasa. Takjil hangat seperti wedang jahe dan bajigur lebih diminati.</div>
+                        </div>
+                        <div class="musim-card">
+                                                        <div class="musim-name">Durasi Puasa</div>
+                            <div class="musim-text">Stabil ±13 jam sepanjang tahun karena dekat khatulistiwa. Tidak terpengaruh perubahan musim.</div>
+                        </div>
+                        <div class="musim-card">
+                                                        <div class="musim-name">Pola Makan</div>
+                            <div class="musim-text">Musim kemarau mendorong konsumsi buah-buahan segar dan minuman elektrolit saat berbuka untuk memulihkan cairan tubuh.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Menu Berbuka & Sahur</h3>
+                    <div class="menu-section">
+                        <h4>Menu Berbuka Puasa</h4>
+                        <div class="menu-chips">
+                            <span class="menu-chip">Kolak Pisang</span>
+                            <span class="menu-chip">Es Campur</span>
+                            <span class="menu-chip">Kurma</span>
+                            <span class="menu-chip">Gorengan</span>
+                            <span class="menu-chip">Bubur Ayam</span>
+                            <span class="menu-chip">Es Buah</span>
+                            <span class="menu-chip">Martabak</span>
+                            <span class="menu-chip">Sop Buah</span>
+                        </div>
+                        <hr class="menu-divider">
+                        <h4>Menu Sahur</h4>
+                        <div class="menu-chips">
+                            <span class="menu-chip">Nasi Goreng</span>
+                            <span class="menu-chip">Nasi Uduk</span>
+                            <span class="menu-chip">Sayur Bayam</span>
+                            <span class="menu-chip">Tempe Goreng</span>
+                            <span class="menu-chip">Telur Dadar</span>
+                            <span class="menu-chip">Ayam Goreng</span>
+                            <span class="menu-chip">Bubur Kacang</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="card">
                     <h3>Tradisi Ramadhan di Indonesia</h3>
                     <ul>
-                        <li><strong>Dugderan</strong>Festival kerakyatan yang menandai masuknya bulan puasa. Dugderan di Semarang diwarnai dengan karnaval dan penabuhan bedug. Sementara Megengan di Jawa Timur identik dengan berbagi kue apem.</li>
-                        <li><strong>Ngabuburit & Takjil</strong>Sebuah tradisi sosial di mana masyarakat keluar rumah pada sore hari untuk mencari makanan manis (takjil). Momen ini sangat efektif dalam mempererat interaksi sosial warga.</li>
-                        <li><strong>Pesantren Kilat</strong>Kegiatan edukasi keagamaan intensif yang dikhususkan bagi para pelajar di sekolah-sekolah selama bulan Ramadhan, bertujuan untuk memperdalam pemahaman Al-Quran.</li>
+                        <li><strong>Dugderan</strong> — Festival kerakyatan yang menandai masuknya bulan puasa. Dugderan di Semarang diwarnai dengan karnaval dan penabuhan bedug. Sementara Megengan di Jawa Timur identik dengan berbagi kue apem.</li>
+                        <li><strong>Ngabuburit & Takjil</strong> — Sebuah tradisi sosial di mana masyarakat keluar rumah pada sore hari untuk mencari makanan manis (takjil). Momen ini sangat efektif dalam mempererat interaksi sosial warga.</li>
+                        <li><strong>Pesantren Kilat</strong> — Kegiatan edukasi keagamaan intensif yang dikhususkan bagi para pelajar di sekolah-sekolah selama bulan Ramadhan, bertujuan untuk memperdalam pemahaman Al-Quran.</li>
                     </ul>
+                </div>
+                <div class="card">
+                    <h3>Fase Tradisi Ramadhan</h3>
+                    <div class="tradisi-timeline">
+                        <div class="tradisi-phase">
+                            <div class="tradisi-phase-label">Fase 1</div>
+                            <div class="tradisi-phase-title">Menjelang Ramadhan</div>
+                            <div class="tradisi-phase-body">Tradisi <strong>Nyadran / Megengan</strong> — ziarah kubur dan doa bersama untuk menyucikan diri. Kegiatan bersih-bersih rumah dan masjid, serta <strong>Padusan</strong> (mandi suci) di sumber air atau sungai di Jawa Tengah.</div>
+                            <div style="margin-top:8px"><span class="tradisi-tag">Nyadran</span><span class="tradisi-tag">Megengan</span><span class="tradisi-tag">Padusan</span><span class="tradisi-tag">Bersih Masjid</span></div>
+                        </div>
+                        <div class="tradisi-phase">
+                            <div class="tradisi-phase-label">Fase 2</div>
+                            <div class="tradisi-phase-title">Saat Ramadhan</div>
+                            <div class="tradisi-phase-body"><strong>Shalat Tarawih</strong> berjamaah setiap malam. <strong>Tadarus Al-Quran</strong> di masjid dan mushola. Kegiatan <strong>Ngabuburit</strong> sore hari dan berbagi takjil gratis di pinggir jalan. <strong>Pesantren Kilat</strong> untuk pelajar.</div>
+                            <div style="margin-top:8px"><span class="tradisi-tag">Tarawih</span><span class="tradisi-tag">Tadarus</span><span class="tradisi-tag">Ngabuburit</span><span class="tradisi-tag">Pesantren Kilat</span></div>
+                        </div>
+                        <div class="tradisi-phase">
+                            <div class="tradisi-phase-label">Fase 3</div>
+                            <div class="tradisi-phase-title">Akhir Ramadhan</div>
+                            <div class="tradisi-phase-body"><strong>Malam Lailatul Qadar</strong> diisi dengan i'tikaf dan ibadah khusus. Tradisi <strong>Mudik</strong> — pulang kampung besar-besaran untuk berkumpul dengan keluarga. <strong>Malam Takbiran</strong> dengan arak-arakan obor dan bedug.</div>
+                            <div style="margin-top:8px"><span class="tradisi-tag">I'tikaf</span><span class="tradisi-tag">Mudik</span><span class="tradisi-tag">Takbiran</span><span class="tradisi-tag">Arak Obor</span></div>
+                        </div>
+                        <div class="tradisi-phase">
+                            <div class="tradisi-phase-label">Fase 4</div>
+                            <div class="tradisi-phase-title">Idul Fitri</div>
+                            <div class="tradisi-phase-body"><strong>Shalat Ied</strong> di lapangan atau masjid besar. Tradisi <strong>Halal Bihalal</strong> — saling bermaaf-maafan antar sesama. <strong>Open house</strong> dengan hidangan ketupat, opor ayam, dan rendang. Bagi-bagi <strong>THR</strong> untuk anak-anak.</div>
+                            <div style="margin-top:8px"><span class="tradisi-tag">Shalat Ied</span><span class="tradisi-tag">Halal Bihalal</span><span class="tradisi-tag">Ketupat</span><span class="tradisi-tag">THR</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -614,12 +982,111 @@
                     <p>Tradisi Ramadhan di Mesir memiliki akar sejarah yang sangat dalam, terutama dipengaruhi oleh masa Dinasti Fatimiyah, serta faktor geografis Lembah Nil yang membentuk kehidupan sosial masyarakatnya. Ramadhan di Mesir dikenal dengan atmosfer "kehidupan malam" di mana jalanan meriah, terang oleh lampion, dan kental dengan semangat komunitas.</p>
                 </div>
                 <div class="card">
+                    <h3>Letak Astronomis</h3>
+                    <div class="astro-box">
+                        <div class="astro-item">
+                            <div class="astro-label">Lintang</div>
+                            <div class="astro-val">22°LU – 31°LU</div>
+                        </div>
+                        <div class="astro-item">
+                            <div class="astro-label">Bujur</div>
+                            <div class="astro-val">25°BT – 37°BT</div>
+                        </div>
+                        <div class="astro-item">
+                            <div class="astro-label">Luas Wilayah</div>
+                            <div class="astro-val">1.001.450 km²</div>
+                        </div>
+                        <div class="astro-item">
+                            <div class="astro-label">Zona Iklim</div>
+                            <div class="astro-val">Gurun Panas</div>
+                        </div>
+                    </div>
+                    <p class="astro-desc">Mesir terletak di Afrika Utara dan sebagian di Asia Barat (Sinai). Posisinya di lintang subtropik menyebabkan perbedaan panjang siang yang signifikan antar musim. 95% wilayah adalah gurun Sahara, kehidupan terkonsentrasi di sepanjang Sungai Nil.</p>
+                </div>
+                <div class="card">
+                    <h3>Pengaruh Musim terhadap Puasa</h3>
+                    <div class="musim-grid">
+                        <div class="musim-card">
+                                                        <div class="musim-name">Ramadhan di Musim Panas</div>
+                            <div class="musim-text">Suhu hingga 40°C dengan durasi puasa 15–16 jam. Tantangan fisik sangat berat — dehidrasi ekstrem menjadi risiko utama di iklim gurun.</div>
+                        </div>
+                        <div class="musim-card">
+                                                        <div class="musim-name">Ramadhan di Musim Dingin</div>
+                            <div class="musim-text">Suhu 10–20°C dengan durasi puasa hanya 13 jam. Jauh lebih mudah secara fisik. Sup panas dan makanan berkuah menjadi pilihan utama berbuka.</div>
+                        </div>
+                        <div class="musim-card">
+                                                        <div class="musim-name">Pola Makan Panas</div>
+                            <div class="musim-text">Musim panas mendorong konsumsi buah berair (semangka, melon) dan minuman dingin seperti jallab dan limun saat berbuka.</div>
+                        </div>
+                        <div class="musim-card">
+                                                        <div class="musim-name">Pola Makan Dingin</div>
+                            <div class="musim-text">Musim dingin mendorong konsumsi sup lentil hangat, harira, dan makanan berat seperti koshari untuk memulihkan energi.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Menu Berbuka & Sahur</h3>
+                    <div class="menu-section">
+                        <h4>Menu Berbuka Puasa</h4>
+                        <div class="menu-chips">
+                            <span class="menu-chip">Kurma</span>
+                            <span class="menu-chip">Sup Lentil</span>
+                            <span class="menu-chip">Ful Medames</span>
+                            <span class="menu-chip">Qatayef</span>
+                            <span class="menu-chip">Om Ali</span>
+                            <span class="menu-chip">Koshari</span>
+                            <span class="menu-chip">Jallab</span>
+                            <span class="menu-chip">Molokhia</span>
+                        </div>
+                        <hr class="menu-divider">
+                        <h4>Menu Sahur</h4>
+                        <div class="menu-chips">
+                            <span class="menu-chip">Roti Pita</span>
+                            <span class="menu-chip">Ful Medames</span>
+                            <span class="menu-chip">Keju Jibneh</span>
+                            <span class="menu-chip">Telur Rebus</span>
+                            <span class="menu-chip">Zabadi (Yogurt)</span>
+                            <span class="menu-chip">Tamriyah</span>
+                            <span class="menu-chip">Teh Kental</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
                     <h3>Tradisi Ramadhan di Mesir</h3>
                     <ul>
-                        <li><strong>Fanoos (Lentera Ramadhan)</strong>Lentera hias dari logam dan kaca berwarna-warni yang digantung di setiap rumah hingga restoran. Tradisi ini berawal dari era Fatimiyah dan kini menjadi simbol universal Ramadhan.</li>
-                        <li><strong>Maidatur Rahman (Meja Tuhan)</strong>Tradisi mendirikan tenda dan meja panjang di pinggir jalan untuk menyediakan makanan berbuka puasa gratis secara masal bagi fakir miskin atau musafir.makanan gratis yang meliputi: sup lentil, ful medames (semur kacang fava), daging panggang, sayuran isi, dan nasi, ditambah hidangan manis favorit seperti qatayef dan makanan penutup Om Ali</li>
-                        <li><strong>Mesaharti (Pembanggil Sahur)</strong>Profesi  Tradisi ini diyakini dimulai sejak abad ke-9 (sekitar 843 M), di mana seorang pria berjalan menyusuri jalanan membawa drum (tabla) untuk membangunkan warga untuk sahur. Meskipun ada alarm modern, tradisi ini tetap bertahan sebagai bagian dari warisan budaya.</li>
+                        <li><strong>Fanoos (Lentera Ramadhan)</strong> — Lentera hias dari logam dan kaca berwarna-warni yang digantung di setiap rumah hingga restoran. Tradisi ini berawal dari era Fatimiyah dan kini menjadi simbol universal Ramadhan.</li>
+                        <li><strong>Maidatur Rahman (Meja Sang Maha Pengasih)</strong> — Tradisi mendirikan tenda dan meja panjang di pinggir jalan untuk menyediakan makanan berbuka puasa gratis secara massal bagi fakir miskin atau musafir. Hidangan yang disajikan meliputi sup lentil, ful medames (semur kacang fava), daging panggang, sayuran isi, dan nasi, ditambah hidangan manis favorit seperti qatayef dan Om Ali.</li>
+                        <li><strong>Mesaharti (Pembangun Sahur)</strong> — Tradisi ini diyakini bermula sejak abad ke-9 (sekitar 843 M), di mana seorang pria berjalan menyusuri jalanan sambil memukul drum (tabla) untuk membangunkan warga bersahur. Meskipun kini ada alarm modern, tradisi ini tetap bertahan sebagai bagian dari warisan budaya yang dijaga turun-temurun.</li>
                     </ul>
+                </div>
+                <div class="card">
+                    <h3>Fase Tradisi Ramadhan</h3>
+                    <div class="tradisi-timeline">
+                        <div class="tradisi-phase">
+                            <div class="tradisi-phase-label">Fase 1</div>
+                            <div class="tradisi-phase-title">Menjelang Ramadhan</div>
+                            <div class="tradisi-phase-body">Masyarakat ramai-ramai membeli <strong>Fanoos</strong> (lentera) baru dan memasangnya di rumah serta jalan. Pasar malam Ramadhan mulai beroperasi. Masjid dihias dengan lampu warna-warni dan spanduk selamat datang Ramadhan.</div>
+                            <div style="margin-top:8px"><span class="tradisi-tag">Beli Fanoos</span><span class="tradisi-tag">Hias Rumah</span><span class="tradisi-tag">Pasar Malam</span></div>
+                        </div>
+                        <div class="tradisi-phase">
+                            <div class="tradisi-phase-label">Fase 2</div>
+                            <div class="tradisi-phase-title">Saat Ramadhan</div>
+                            <div class="tradisi-phase-body"><strong>Mesaharti</strong> membangunkan sahur setiap malam. <strong>Maidatur Rahman</strong> (meja panjang gratis) tersebar di banyak sudut kota. Malam-malam diisi dengan acara televisi Ramadhan spesial dan kunjungan keluarga. Jalanan Kairo justru semakin ramai malam hari.</div>
+                            <div style="margin-top:8px"><span class="tradisi-tag">Mesaharti</span><span class="tradisi-tag">Maidatur Rahman</span><span class="tradisi-tag">TV Ramadhan</span></div>
+                        </div>
+                        <div class="tradisi-phase">
+                            <div class="tradisi-phase-label">Fase 3</div>
+                            <div class="tradisi-phase-title">Akhir Ramadhan</div>
+                            <div class="tradisi-phase-body">Malam <strong>Lailatul Qadar</strong> diisi dengan shalat semalam suntuk. Persiapan pakaian baru dan kue <strong>Kahk</strong> (kue Idul Fitri khas Mesir berisi kurma atau kacang) untuk dibagikan kepada kerabat.</div>
+                            <div style="margin-top:8px"><span class="tradisi-tag">Lailatul Qadar</span><span class="tradisi-tag">Buat Kahk</span><span class="tradisi-tag">Baju Baru</span></div>
+                        </div>
+                        <div class="tradisi-phase">
+                            <div class="tradisi-phase-label">Fase 4</div>
+                            <div class="tradisi-phase-title">Idul Fitri (Eid el-Fitr)</div>
+                            <div class="tradisi-phase-body"><strong>Shalat Ied</strong> di lapangan terbuka atau masjid besar. Tradisi <strong>Ma'amoul</strong> — berbagi kue kurma kepada tetangga. <strong>Ziarah makam</strong> keluarga yang meninggal. Anak-anak menerima uang Eid (<em>Eidiyya</em>) dari orang tua dan saudara tua.</div>
+                            <div style="margin-top:8px"><span class="tradisi-tag">Shalat Ied</span><span class="tradisi-tag">Kue Ma'amoul</span><span class="tradisi-tag">Eidiyya</span><span class="tradisi-tag">Ziarah</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -627,39 +1094,454 @@
         <div id="turki" class="tab-content">
             <div class="content-grid">
                 <div class="card">
-                    <h3>Konteks Sejarah & Geografis </h3>
-                    <p>Tradisi Ramadan di Turki merupakan perpaduan unik antara spiritualitas Islam dan warisan budaya Kesultanan Utsmaniyah (Ottoman) yang mengutamakan semangat berbagi, kebersamaan sosial, dan kemeriahan malam. Secara geografis, tradisi ini berpusat di kota-kota besar seperti Istanbul, Ankara, dan Bursa.</p>
+                    <h3>Konteks Sejarah & Geografis</h3>
+                    <p>Tradisi Ramadhan di Turki merupakan perpaduan unik antara spiritualitas Islam dan warisan budaya Kesultanan Utsmaniyah (Ottoman) yang mengutamakan semangat berbagi, kebersamaan sosial, dan kemeriahan malam. Secara geografis, tradisi ini berpusat di kota-kota besar seperti Istanbul, Ankara, dan Bursa.</p>
+                </div>
+                <div class="card">
+                    <h3>Letak Astronomis</h3>
+                    <div class="astro-box">
+                        <div class="astro-item">
+                            <div class="astro-label">Lintang</div>
+                            <div class="astro-val">36°LU – 42°LU</div>
+                        </div>
+                        <div class="astro-item">
+                            <div class="astro-label">Bujur</div>
+                            <div class="astro-val">26°BT – 45°BT</div>
+                        </div>
+                        <div class="astro-item">
+                            <div class="astro-label">Luas Wilayah</div>
+                            <div class="astro-val">783.562 km²</div>
+                        </div>
+                        <div class="astro-item">
+                            <div class="astro-label">Posisi Unik</div>
+                            <div class="astro-val">2 Benua</div>
+                        </div>
+                    </div>
+                    <p class="astro-desc">Turki adalah negara transkontinental yang membentang di Asia Barat (Anatolia) dan Eropa Tenggara (Trakya). Letak lintangnya yang tinggi menyebabkan perbedaan ekstrem panjang siang antara musim panas (17+ jam) dan musim dingin (14 jam), sangat mempengaruhi durasi puasa.</p>
+                </div>
+                <div class="card">
+                    <h3>Pengaruh Musim terhadap Puasa</h3>
+                    <div class="musim-grid">
+                        <div class="musim-card">
+                                                        <div class="musim-name">Ramadhan di Musim Panas</div>
+                            <div class="musim-text">Durasi puasa bisa mencapai 17 jam lebih. Suhu 30–38°C di kota-kota besar. Tantangan terberat, masyarakat lebih banyak beristirahat siang hari.</div>
+                        </div>
+                        <div class="musim-card">
+                                                        <div class="musim-name">Ramadhan di Musim Dingin</div>
+                            <div class="musim-text">Durasi puasa hanya ~14 jam. Suhu bisa di bawah 0°C di Ankara. Çorba (sup hangat) dan minuman panas mendominasi menu berbuka.</div>
+                        </div>
+                        <div class="musim-card">
+                                                        <div class="musim-name">Ramadhan di Musim Semi</div>
+                            <div class="musim-text">Durasi sekitar 15–16 jam. Cuaca paling nyaman. Tradisi buka bersama di taman kota dan tepi Bosphorus sangat populer.</div>
+                        </div>
+                        <div class="musim-card">
+                                                        <div class="musim-name">Adaptasi Pola Makan</div>
+                            <div class="musim-text">Musim mempengaruhi pilihan menu — sup kental di musim dingin, meze segar dan salad di musim panas. Pide tetap wajib sepanjang musim.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Menu Berbuka & Sahur</h3>
+                    <div class="menu-section">
+                        <h4>Menu Berbuka Puasa (İftar)</h4>
+                        <div class="menu-chips">
+                            <span class="menu-chip">Kurma</span>
+                            <span class="menu-chip">Zeytin (Zaitun)</span>
+                            <span class="menu-chip">Pide</span>
+                            <span class="menu-chip">Mercimek Çorbası</span>
+                            <span class="menu-chip">Güllaç</span>
+                            <span class="menu-chip">Pilav</span>
+                            <span class="menu-chip">Kebap</span>
+                            <span class="menu-chip">Baklava</span>
+                        </div>
+                        <hr class="menu-divider">
+                        <h4>Menu Sahur (Sahur)</h4>
+                        <div class="menu-chips">
+                            <span class="menu-chip">Roti Turki</span>
+                            <span class="menu-chip">Beyaz Peynir (Keju Putih)</span>
+                            <span class="menu-chip">Telur Berbumbu (Acil)</span>
+                            <span class="menu-chip">Ayran</span>
+                            <span class="menu-chip">Zeytin</span>
+                            <span class="menu-chip">Bal & Kaymak</span>
+                            <span class="menu-chip">Teh Turki</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="card">
                     <h3>Tradisi Ramadhan di Turki</h3>
                     <ul>
-                        <li><strong>Seni Mahya</strong>Seni merangkai ribuan lampu pijar di antara dua menara masjid besar. Lampu-lampu ini membentuk kaligrafi raksasa atau pesan moral di langit malam.</li>
-                        <li><strong>Ramazan Davulcusu</strong>Penabuh drum sahur yang berkeliling menggunakan pakaian tradisional era Ottoman sambil menyanyikan mani (puisi tradisional Turki).</li>
-                        <li><strong>Pide & Güllaç</strong>Pide adalah roti hangat berlapis wijen, sementara Güllaç adalah makanan penutup istimewa khas Ramadhan dari lembaran adonan direndam susu manis dan air mawar.</li>
+                        <li><strong>Seni Mahya</strong> — Seni merangkai ribuan lampu pijar di antara dua menara masjid besar. Lampu-lampu ini membentuk kaligrafi raksasa atau pesan moral yang bercahaya di langit malam.</li>
+                        <li><strong>Ramazan Davulcusu</strong> — Penabuh drum sahur yang berkeliling menggunakan pakaian tradisional era Ottoman sambil menyanyikan mani (puisi tradisional Turki) untuk membangunkan warga bersahur.</li>
+                        <li><strong>Pide & Güllaç</strong> — Pide adalah roti hangat berlapis wijen yang hanya diproduksi saat Ramadhan. Sementara Güllaç adalah makanan penutup istimewa khas Ramadhan yang terbuat dari lembaran adonan tipis yang direndam dalam susu manis dan air mawar.</li>
                     </ul>
+                </div>
+                <div class="card">
+                    <h3>Fase Tradisi Ramadhan</h3>
+                    <div class="tradisi-timeline">
+                        <div class="tradisi-phase">
+                            <div class="tradisi-phase-label">Fase 1</div>
+                            <div class="tradisi-phase-title">Menjelang Ramadhan</div>
+                            <div class="tradisi-phase-body">Masjid-masjid besar mulai memasang <strong>Mahya</strong> — instalasi lampu kaligrafi raksasa di antara dua menara. Toko roti mulai mempersiapkan tungku khusus untuk produksi <strong>Pide Ramazan</strong>. Keluarga mempersiapkan stok bahan sahur dan iftar.</div>
+                            <div style="margin-top:8px"><span class="tradisi-tag">Pasang Mahya</span><span class="tradisi-tag">Siapkan Pide</span><span class="tradisi-tag">Hias Masjid</span></div>
+                        </div>
+                        <div class="tradisi-phase">
+                            <div class="tradisi-phase-label">Fase 2</div>
+                            <div class="tradisi-phase-title">Saat Ramadhan</div>
+                            <div class="tradisi-phase-body"><strong>Ramazan Davulcusu</strong> berkeliling kota membunyikan davul setiap dini hari. <strong>İftar çadırları</strong> (tenda buka puasa gratis) didirikan pemerintah kota. Acara budaya Ramadhan seperti pertunjukan wayang Karagöz digelar di alun-alun kota.</div>
+                            <div style="margin-top:8px"><span class="tradisi-tag">Davulcusu</span><span class="tradisi-tag">İftar Çadırı</span><span class="tradisi-tag">Karagöz</span></div>
+                        </div>
+                        <div class="tradisi-phase">
+                            <div class="tradisi-phase-label">Fase 3</div>
+                            <div class="tradisi-phase-title">Akhir Ramadhan (Kadir Gecesi)</div>
+                            <div class="tradisi-phase-body"><strong>Kadir Gecesi</strong> (Malam Lailatul Qadar) adalah malam paling suci. Masjid-masjid membuka pintu sepanjang malam. Jutaan orang melakukan itikaf. Produksi dan penjualan <strong>Lokum</strong> (Turkish Delight) dan <strong>Baklava</strong> meningkat pesat untuk persiapan Lebaran.</div>
+                            <div style="margin-top:8px"><span class="tradisi-tag">Kadir Gecesi</span><span class="tradisi-tag">İtikaf</span><span class="tradisi-tag">Beli Baklava</span></div>
+                        </div>
+                        <div class="tradisi-phase">
+                            <div class="tradisi-phase-label">Fase 4</div>
+                            <div class="tradisi-phase-title">Idul Fitri (Şeker Bayramı)</div>
+                            <div class="tradisi-phase-body"><strong>Şeker Bayramı</strong> (Lebaran Gula) — anak-anak mengunjungi rumah orang dewasa untuk mencium tangan (<em>el öpme</em>) dan menerima permen atau cokelat. <strong>Bayram namazı</strong> (shalat Ied) di masjid. Kunjungan keluarga besar dan ziarah makam leluhur.</div>
+                            <div style="margin-top:8px"><span class="tradisi-tag">Şeker Bayramı</span><span class="tradisi-tag">El Öpme</span><span class="tradisi-tag">Bayram Namazı</span><span class="tradisi-tag">Ziarah</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div id="jepang" class="tab-content">
+        <div id="thailand" class="tab-content">
             <div class="content-grid">
                 <div class="card">
                     <h3>Konteks Sejarah & Geografis</h3>
-                    <p>Tradisi Ramadhan di Jepang merupakan perpaduan antara ketaatan beribadah di tengah minoritas Muslim dan adaptasi budaya terhadap lingkungan kerja serta cuaca setempat. Islam di Jepang berakar dari perdagangan pada awal abad ke-20 dan tumbuh signifikan melalui imigrasi dan konversi, dengan populasi Muslim diperkirakan mencapai 420.000 jiwa pada akhir 2024. </p>
+                    <p>Tradisi Ramadhan di Thailand merupakan cerminan ketahanan iman komunitas Muslim yang hidup sebagai minoritas di negara mayoritas Buddha. Islam masuk ke Thailand melalui jalur perdagangan Selat Malaka sejak abad ke-13, dan kini populasi Muslim Thailand diperkirakan mencapai 4,5 juta jiwa, terkonsentrasi di empat provinsi selatan: Pattani, Yala, Narathiwat, dan Satun. Di wilayah ini, suasana Ramadhan terasa begitu kental, bahkan menyerupai nuansa Ramadhan di negara-negara mayoritas Muslim.</p>
                 </div>
                 <div class="card">
-                    <h3>Tradisi Ramadhan di Jepang</h3>
+                    <h3>Letak Astronomis</h3>
+                    <div class="astro-box">
+                        <div class="astro-item">
+                            <div class="astro-label">Lintang</div>
+                            <div class="astro-val">5°LU – 21°LU</div>
+                        </div>
+                        <div class="astro-item">
+                            <div class="astro-label">Bujur</div>
+                            <div class="astro-val">97°BT – 106°BT</div>
+                        </div>
+                        <div class="astro-item">
+                            <div class="astro-label">Luas Wilayah</div>
+                            <div class="astro-val">513.120 km²</div>
+                        </div>
+                        <div class="astro-item">
+                            <div class="astro-label">Posisi</div>
+                            <div class="astro-val">Asia Tenggara</div>
+                        </div>
+                    </div>
+                    <p class="astro-desc">Thailand terletak di Asia Tenggara, berbatasan langsung dengan Malaysia di selatan. Posisinya yang dekat dengan khatulistiwa menyebabkan durasi siang relatif stabil sekitar 12–13 jam sepanjang tahun, sehingga panjang puasa tidak terlalu dipengaruhi oleh pergantian musim. Iklim tropis mendominasi seluruh wilayah.</p>
+                </div>
+                <div class="card">
+                    <h3>Pengaruh Musim terhadap Puasa</h3>
+                    <div class="musim-grid">
+                        <div class="musim-card">
+                                                        <div class="musim-name">Musim Panas (Mar–Mei)</div>
+                            <div class="musim-text">Suhu 35–40°C, sangat panas dan lembab. Durasi puasa sekitar 13 jam. Tantangan utama adalah dehidrasi dan kelelahan fisik akibat terik matahari.</div>
+                        </div>
+                        <div class="musim-card">
+                                                        <div class="musim-name">Musim Hujan (Jun–Okt)</div>
+                            <div class="musim-text">Cuaca lebih sejuk, suhu 27–33°C. Durasi puasa tetap stabil ±13 jam. Hujan sore hari memberikan kesegaran menjelang waktu berbuka puasa.</div>
+                        </div>
+                        <div class="musim-card">
+                                                        <div class="musim-name">Musim Sejuk (Nov–Feb)</div>
+                            <div class="musim-text">Suhu 20–30°C, paling nyaman untuk berpuasa. Durasi puasa sekitar 12–13 jam. Aktivitas buka bersama di luar ruangan sangat populer pada musim ini.</div>
+                        </div>
+                        <div class="musim-card">
+                                                        <div class="musim-name">Adaptasi Pola Makan</div>
+                            <div class="musim-text">Musim panas mendorong konsumsi minuman segar seperti air kelapa dan es campur saat berbuka. Pada musim sejuk, sup hangat seperti Tom Yam Halal menjadi pilihan favorit.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Menu Berbuka & Sahur</h3>
+                    <div class="menu-section">
+                        <h4>Menu Berbuka Puasa</h4>
+                        <div class="menu-chips">
+                            <span class="menu-chip">Kurma</span>
+                            <span class="menu-chip">Khao Yam (Nasi Rempah)</span>
+                            <span class="menu-chip">Roti Canai</span>
+                            <span class="menu-chip">Sup Oxtail Halal</span>
+                            <span class="menu-chip">Satay Ayam</span>
+                            <span class="menu-chip">Murtabak</span>
+                            <span class="menu-chip">Es Buah Tropik</span>
+                            <span class="menu-chip">Kanom Krok</span>
+                        </div>
+                        <hr class="menu-divider">
+                        <h4>Menu Sahur</h4>
+                        <div class="menu-chips">
+                            <span class="menu-chip">Nasi Goreng Halal</span>
+                            <span class="menu-chip">Khanom Jeen</span>
+                            <span class="menu-chip">Telur Dadar</span>
+                            <span class="menu-chip">Ikan Bakar</span>
+                            <span class="menu-chip">Sayur Tumis</span>
+                            <span class="menu-chip">Air Kelapa</span>
+                            <span class="menu-chip">Bubur Ayam</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Tradisi Ramadhan di Thailand</h3>
                     <ul>
-                        <li><strong>Sahur/Buka Bersama WNI</strong>Komunitas Indonesia di Jepang sering mengadakan acara Sahur/Buka bersama untuk mengobati kerinduan kampung halaman dan menambah ikatan islam dengan muslim di jepang.</li>
-                        <li><strong>Teknologi Pendeteksi Halal</strong>Muslim di Jepang sangat bergantung pada aplikasi ponsel pintar untuk mengecek komposisi bahan secara instan saat berbelanja di minimarket.</li>
-                        <li><strong>Makanan Khas Jepang</strong>Sushi: Pilihan dengan bahan seperti ikan tuna, salmon, atau udang yang halal, tanpa tambahan bahan haram seperti mayones berbahan dasar alkohol atau bahan laut yang tidak diizinkan.
-  Tempura: Sayuran atau udang yang dibalut adonan tepung dan digoreng dengan minyak halal.</li>
+                        <li><strong>Pasar Ramadhan Pattani</strong> — Setiap sore menjelang berbuka, pasar Ramadhan di Pattani dan kota-kota selatan Thailand dipenuhi penjual makanan halal khas Melayu-Thailand. Suasana ini menjadi ajang silaturahmi warga dan memperkenalkan kuliner Muslim kepada wisatawan.</li>
+                        <li><strong>Tarawih Bersama di Masjid Krisna</strong> — Masjid-masjid bersejarah di Thailand Selatan, seperti Masjid Krisna dan Masjid Pattani, menjadi pusat shalat Tarawih berjamaah yang mengumpulkan ratusan jamaah setiap malamnya selama bulan Ramadhan.</li>
+                        <li><strong>Kolaborasi Budaya Muslim-Buddha</strong> — Di Bangkok dan kota-kota besar, warga Buddha kerap mengunjungi pasar Ramadhan dan ikut merayakan nuansa Ramadhan bersama tetangga Muslim mereka, mencerminkan semangat toleransi dan kerukunan antarumat beragama di Thailand.</li>
                     </ul>
+                </div>
+                <div class="card">
+                    <h3>Fase Tradisi Ramadhan</h3>
+                    <div class="tradisi-timeline">
+                        <div class="tradisi-phase">
+                            <div class="tradisi-phase-label">Fase 1</div>
+                            <div class="tradisi-phase-title">Menjelang Ramadhan</div>
+                            <div class="tradisi-phase-body">Komunitas Muslim di Thailand Selatan mulai membersihkan dan menghias masjid. Para pedagang mempersiapkan lapak pasar Ramadhan. Keluarga berbelanja bahan-bahan sahur dan mempersiapkan jadwal imsakiyah dalam bahasa Thailand dan Melayu Patani.</div>
+                            <div style="margin-top:8px"><span class="tradisi-tag">Hias Masjid</span><span class="tradisi-tag">Siapkan Pasar</span><span class="tradisi-tag">Jadwal Imsakiyah</span></div>
+                        </div>
+                        <div class="tradisi-phase">
+                            <div class="tradisi-phase-label">Fase 2</div>
+                            <div class="tradisi-phase-title">Saat Ramadhan</div>
+                            <div class="tradisi-phase-body"><strong>Pasar Ramadhan</strong> buka setiap sore hari mulai pukul 15.00 hingga waktu berbuka. <strong>Shalat Tarawih</strong> berjamaah di masjid-masjid utama dipadati jamaah. Kegiatan <strong>tadarus Al-Quran</strong> diadakan setiap malam. Komunitas Muslim lintas etnis (Melayu, Arab, India) berbaur di masjid.</div>
+                            <div style="margin-top:8px"><span class="tradisi-tag">Pasar Ramadhan</span><span class="tradisi-tag">Tarawih</span><span class="tradisi-tag">Tadarus</span></div>
+                        </div>
+                        <div class="tradisi-phase">
+                            <div class="tradisi-phase-label">Fase 3</div>
+                            <div class="tradisi-phase-title">Akhir Ramadhan</div>
+                            <div class="tradisi-phase-body"><strong>Malam Lailatul Qadar</strong> diisi dengan ibadah dan doa semalam suntuk di masjid. Masyarakat mulai mempersiapkan pakaian baru dan kue-kue khas Eid. <strong>Zakat fitrah</strong> dibagikan kepada fakir miskin sebelum shalat Ied dilaksanakan.</div>
+                            <div style="margin-top:8px"><span class="tradisi-tag">Lailatul Qadar</span><span class="tradisi-tag">Zakat Fitrah</span><span class="tradisi-tag">Baju Baru</span></div>
+                        </div>
+                        <div class="tradisi-phase">
+                            <div class="tradisi-phase-label">Fase 4</div>
+                            <div class="tradisi-phase-title">Idul Fitri (Hari Raya Aidil Fitri)</div>
+                            <div class="tradisi-phase-body"><strong>Shalat Ied</strong> di lapangan terbuka atau masjid besar, dihadiri ribuan jamaah berpakaian adat Melayu. Tradisi <strong>Kenduri</strong> (pesta makan bersama) diadakan di rumah dan masjid. Anak-anak mengunjungi rumah orang tua dan tetangga untuk meminta maaf dan menerima uang Eid. Pemerintah Thailand menetapkan hari raya sebagai hari libur resmi di provinsi selatan.</div>
+                            <div style="margin-top:8px"><span class="tradisi-tag">Shalat Ied</span><span class="tradisi-tag">Kenduri</span><span class="tradisi-tag">Uang Eid</span><span class="tradisi-tag">Libur Nasional</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="data" class="tab-content">
+
+            <!-- SELISIH PUASA ANTAR NEGARA -->
+            <p class="chart-section-title">Selisih Durasi Puasa Antar Negara</p>
+            <div class="selisih-grid">
+                <div class="selisih-card sc-id">
+                    <div class="sc-name">Indonesia</div>
+                    <div class="sc-jam">13 jam</div>
+                    <div class="sc-diff">Referensi (paling pendek & stabil)</div>
+                </div>
+                <div class="selisih-card sc-eg">
+                    <div class="sc-name">Mesir</div>
+                    <div class="sc-jam">14 jam</div>
+                    <div class="sc-diff">+1 jam dari Indonesia</div>
+                </div>
+                <div class="selisih-card sc-th">
+                    <div class="sc-name">Thailand</div>
+                    <div class="sc-jam">13 jam</div>
+                    <div class="sc-diff">Setara dengan Indonesia</div>
+                </div>
+                <div class="selisih-card sc-tr">
+                    <div class="sc-name">Turki</div>
+                    <div class="sc-jam">15.5 jam</div>
+                    <div class="sc-diff">+2.5 jam dari Indonesia</div>
+                </div>
+            </div>
+            <div class="data-table-wrapper" style="margin-bottom:25px;">
+                <table class="selisih-matrix">
+                    <thead>
+                        <tr>
+                            <th>Perbandingan</th>
+                            <th>Indonesia (13j)</th>
+                            <th>Mesir (14j)</th>
+                            <th>Turki (15.5j)</th>
+                            <th>Thailand (13j)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>vs Indonesia (13j)</strong></td>
+                            <td><span class="badge-same">—</span></td>
+                            <td><span class="badge-plus">+1 jam</span></td>
+                            <td><span class="badge-plus">+2.5 jam</span></td>
+                            <td><span class="badge-same">—</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>vs Mesir (14j)</strong></td>
+                            <td><span class="badge-minus">−1 jam</span></td>
+                            <td><span class="badge-same">—</span></td>
+                            <td><span class="badge-plus">+1.5 jam</span></td>
+                            <td><span class="badge-minus">−1 jam</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>vs Turki (15.5j)</strong></td>
+                            <td><span class="badge-minus">−2.5 jam</span></td>
+                            <td><span class="badge-minus">−1.5 jam</span></td>
+                            <td><span class="badge-same">—</span></td>
+                            <td><span class="badge-minus">−2.5 jam</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>vs Thailand (13j)</strong></td>
+                            <td><span class="badge-same">—</span></td>
+                            <td><span class="badge-plus">+1 jam</span></td>
+                            <td><span class="badge-plus">+2.5 jam</span></td>
+                            <td><span class="badge-same">—</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="chart-card" style="margin-bottom:25px; background:#f8fafa;">
+                <h4>Analisis Selisih & Penyebab</h4>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;margin-top:10px;">
+                    <div style="background:#fff;border-radius:12px;padding:15px;border-left:4px solid #27ae60;">
+                        <strong style="color:#27ae60;font-size:0.9rem;">Indonesia</strong><br>
+                        <span style="font-size:0.82rem;color:#555;">Terletak di ekuator (0°), panjang siang hampir selalu 12 jam. Durasi puasa paling stabil dan konsisten sepanjang tahun tanpa pengaruh musim yang berarti.</span>
+                    </div>
+                    <div style="background:#fff;border-radius:12px;padding:15px;border-left:4px solid #e67e22;">
+                        <strong style="color:#e67e22;font-size:0.9rem;">Mesir (+1j)</strong><br>
+                        <span style="font-size:0.82rem;color:#555;">Lintang 22°–31°LU menyebabkan siang lebih panjang di musim panas. Selisih 1 jam dari Indonesia karena posisi di subtropik utara.</span>
+                    </div>
+                    <div style="background:#fff;border-radius:12px;padding:15px;border-left:4px solid #2980b9;">
+                        <strong style="color:#2980b9;font-size:0.9rem;">Turki (+2.5j)</strong><br>
+                        <span style="font-size:0.82rem;color:#555;">Lintang 36°–42°LU — paling jauh dari ekuator. Siang bisa 17+ jam di musim panas. Selisih terbesar dari Indonesia, menjadikannya negara dengan puasa terlama di antara keempat negara ini.</span>
+                    </div>
+                    <div style="background:#fff;border-radius:12px;padding:15px;border-left:4px solid #c0392b;">
+                        <strong style="color:#c0392b;font-size:0.9rem;">Thailand (±0j)</strong><br>
+                        <span style="font-size:0.82rem;color:#555;">Terletak di lintang 5°–21°LU, dekat khatulistiwa. Panjang siang relatif stabil sekitar 12–13 jam sepanjang tahun. Durasi puasa hampir sama dengan Indonesia, menjadikan Thailand salah satu negara dengan kondisi puasa paling ringan di antara keempat negara ini.</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- STATISTIK RINGKAS -->
+
+
+            <!-- 1. GAUGE: JAM PUASA dari 24 JAM -->
+            <p class="chart-section-title">Proporsi Jam Puasa dari 24 Jam</p>
+            <div class="gauge-grid">
+                <!-- Indonesia -->
+                <div class="gauge-card gc-id">
+                    <div class="gauge-flag">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 28" width="40" height="28"><rect width="40" height="14" fill="#CE1126"/><rect y="14" width="40" height="14" fill="#FFFFFF"/></svg>
+                    </div>
+                    <div class="gauge-name">Indonesia</div>
+                    <div class="gauge-wrap">
+                        <canvas id="gauge-id" width="110" height="60"></canvas>
+                        <div class="gauge-value" style="color:#27ae60">13 jam</div>
+                    </div>
+                    <div class="gauge-sub">54% dari 24 jam</div>
+                </div>
+                <!-- Mesir -->
+                <div class="gauge-card gc-eg">
+                    <div class="gauge-flag">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 28" width="40" height="28"><rect width="40" height="9.33" fill="#CE1126"/><rect y="9.33" width="40" height="9.33" fill="#FFFFFF"/><rect y="18.67" width="40" height="9.33" fill="#000"/><text x="20" y="19" text-anchor="middle" font-size="9" fill="#C09300">&#9786;</text></svg>
+                    </div>
+                    <div class="gauge-name">Mesir</div>
+                    <div class="gauge-wrap">
+                        <canvas id="gauge-eg" width="110" height="60"></canvas>
+                        <div class="gauge-value" style="color:#e67e22">14 jam</div>
+                    </div>
+                    <div class="gauge-sub">58% dari 24 jam</div>
+                </div>
+                <!-- Turki -->
+                <div class="gauge-card gc-tr">
+                    <div class="gauge-flag">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 28" width="40" height="28"><rect width="40" height="28" fill="#E30A17"/><circle cx="16" cy="14" r="7" fill="white"/><circle cx="18.5" cy="14" r="5.4" fill="#E30A17"/><polygon points="25,14 22.5,12 22.5,16" fill="white"/><polygon points="27,11 23.5,14 27,17 25,14" fill="white"/></svg>
+                    </div>
+                    <div class="gauge-name">Turki</div>
+                    <div class="gauge-wrap">
+                        <canvas id="gauge-tr" width="110" height="60"></canvas>
+                        <div class="gauge-value" style="color:#2980b9">15.5 jam</div>
+                    </div>
+                    <div class="gauge-sub">65% dari 24 jam</div>
+                </div>
+                <!-- Thailand -->
+                <div class="gauge-card gc-th">
+                    <div class="gauge-flag">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 28" width="40" height="28">
+                            <rect width="40" height="28" fill="#A51931"/>
+                            <rect y="4.67" width="40" height="18.67" fill="#FFFFFF"/>
+                            <rect y="9.33" width="40" height="9.33" fill="#2D2A4A"/>
+                        </svg>
+                    </div>
+                    <div class="gauge-name">Thailand</div>
+                    <div class="gauge-wrap">
+                        <canvas id="gauge-th" width="110" height="60"></canvas>
+                        <div class="gauge-value" style="color:#c0392b">13 jam</div>
+                    </div>
+                    <div class="gauge-sub">54% dari 24 jam</div>
+                </div>
+            </div>
+
+            <!-- 2. HORIZONTAL RANGE BAR -->
+            <!-- 3. GROUPED BAR + RATA-RATA & SCATTER SUHU -->
+            <p class="chart-section-title">Analisis Lanjutan</p>
+            <div style="margin-bottom:25px;">
+                <div class="chart-card">
+                    <h4>Min, Rata-rata & Maks Durasi Puasa</h4>
+                    <div style="overflow-x:auto;margin-top:12px;">
+                        <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+                            <thead>
+                                <tr style="background:var(--primary);color:#fff;">
+                                    <th style="padding:12px 15px;text-align:left;">Negara</th>
+                                    <th style="padding:12px 15px;text-align:center;">Minimum (Jam)</th>
+                                    <th style="padding:12px 15px;text-align:center;">Rata-rata (Jam)</th>
+                                    <th style="padding:12px 15px;text-align:center;">Maksimum (Jam)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom:1px solid #f0f0f0;">
+                                    <td style="padding:12px 15px;font-weight:700;color:#27ae60;">Indonesia</td>
+                                    <td style="padding:12px 15px;text-align:center;">13</td>
+                                    <td style="padding:12px 15px;text-align:center;"><strong style="background:#27ae60;color:#fff;padding:3px 10px;border-radius:20px;">13</strong></td>
+                                    <td style="padding:12px 15px;text-align:center;">13</td>
+                                </tr>
+                                <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa;">
+                                    <td style="padding:12px 15px;font-weight:700;color:#e67e22;">Mesir</td>
+                                    <td style="padding:12px 15px;text-align:center;">13</td>
+                                    <td style="padding:12px 15px;text-align:center;"><strong style="background:#e67e22;color:#fff;padding:3px 10px;border-radius:20px;">14</strong></td>
+                                    <td style="padding:12px 15px;text-align:center;">15</td>
+                                </tr>
+                                <tr style="border-bottom:1px solid #f0f0f0;">
+                                    <td style="padding:12px 15px;font-weight:700;color:#2980b9;">Turki</td>
+                                    <td style="padding:12px 15px;text-align:center;">14</td>
+                                    <td style="padding:12px 15px;text-align:center;"><strong style="background:#2980b9;color:#fff;padding:3px 10px;border-radius:20px;">15.5</strong></td>
+                                    <td style="padding:12px 15px;text-align:center;">17</td>
+                                </tr>
+                                <tr style="background:#fafafa;">
+                                    <td style="padding:12px 15px;font-weight:700;color:#c0392b;">Thailand</td>
+                                    <td style="padding:12px 15px;text-align:center;">12</td>
+                                    <td style="padding:12px 15px;text-align:center;"><strong style="background:#c0392b;color:#fff;padding:3px 10px;border-radius:20px;">13</strong></td>
+                                    <td style="padding:12px 15px;text-align:center;">13</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- 4. RADAR + LINE -->
+            <!-- 5. DOUGHNUT -->
+            <p class="chart-section-title">Distribusi Populasi Muslim</p>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h4>Populasi Muslim (Perkiraan, Juta)</h4>
+                    <canvas id="chartPopulasi"></canvas>
+                </div>
+                <div class="chart-card" style="display:flex;flex-direction:column;justify-content:center;">
+                    <h4>Catatan Data</h4>
+                    <div style="font-size:0.88rem;color:#555;line-height:1.8;padding:10px 0;">
+                        <p style="margin-bottom:10px;">• <strong>Durasi puasa</strong> bervariasi tergantung posisi geografis (lintang) dan musim saat Ramadhan berlangsung.</p>
+                        <p style="margin-bottom:10px;">• <strong>Indonesia</strong> memiliki durasi paling stabil karena dekat khatulistiwa, tidak terpengaruh musim.</p>
+                        <p style="margin-bottom:10px;">• <strong>Turki</strong> memiliki rentang durasi terlebar karena berada di lintang tinggi dengan perbedaan panjang siang yang ekstrem antar musim.</p>
+                        <p>• <strong>Suhu tinggi + durasi panjang</strong> (Mesir, Turki) menjadi tantangan fisik terbesar dalam berpuasa.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABEL DATA -->
+            <p class="chart-section-title">Tabel Data Lengkap</p>
             <div class="data-table-wrapper">
                 <table>
                     <thead>
@@ -668,32 +1550,42 @@
                             <th>Zona Waktu</th>
                             <th>Iklim</th>
                             <th>Durasi Puasa</th>
+                            <th>Rata-rata</th>
+                            <th>Suhu Ramadhan</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><strong>🇮🇩 Indonesia</strong></td>
-                            <td>GMT +7 s/d +9</td>
+                            <td><div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 14" width="28" height="20" style="border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.3)"><rect width="20" height="7" fill="#CE1126"/><rect y="7" width="20" height="7" fill="#FFFFFF"/></svg><strong>Indonesia</strong></div></td>
+                            <td>GMT +7 (WIB) / +8 (WITA) / +9 (WIT)</td>
                             <td>Tropis</td>
                             <td>~ 13 Jam</td>
+                            <td>13 Jam</td>
+                            <td>~29°C</td>
                         </tr>
                         <tr>
-                            <td><strong>🇪🇬 Mesir</strong></td>
+                            <td><div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 14" width="28" height="20" style="border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.3)"><rect width="20" height="4.67" fill="#CE1126"/><rect y="4.67" width="20" height="4.67" fill="#FFFFFF"/><rect y="9.33" width="20" height="4.67" fill="#000000"/></svg><strong>Mesir</strong></div></td>
                             <td>GMT +2</td>
                             <td>Gurun Kering</td>
-                            <td>13 - 15 Jam</td>
+                            <td>13 – 15 Jam</td>
+                            <td>14 Jam</td>
+                            <td>~34°C</td>
                         </tr>
                         <tr>
-                            <td><strong>🇹🇷 Turki</strong></td>
+                            <td><div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 14" width="28" height="20" style="border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.3)"><rect width="20" height="14" fill="#E30A17"/><circle cx="8" cy="7" r="3.5" fill="white"/><circle cx="9.2" cy="7" r="2.7" fill="#E30A17"/><polygon points="13,7 11.8,6.2 11.8,7.8" fill="white"/></svg><strong>Turki</strong></div></td>
                             <td>GMT +3</td>
                             <td>Subtropis</td>
-                            <td>14 - 17 Jam</td>
+                            <td>14 – 17 Jam</td>
+                            <td>15.5 Jam</td>
+                            <td>~22°C</td>
                         </tr>
                         <tr>
-                            <td><strong>🇯🇵 Jepang</strong></td>
-                            <td>GMT +9</td>
-                            <td>4 Musim</td>
-                            <td>12 - 17 Jam</td>
+                            <td><div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 14" width="28" height="20" style="border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.3)"><rect width="20" height="14" fill="#A51931"/><rect y="3.33" width="20" height="7.33" fill="#FFFFFF"/><rect y="5.33" width="20" height="3.33" fill="#2D2A4A"/></svg><strong>Thailand</strong></div></td>
+                            <td>GMT +7</td>
+                            <td>Tropis</td>
+                            <td>12 – 13 Jam</td>
+                            <td>13 Jam</td>
+                            <td>~32°C</td>
                         </tr>
                     </tbody>
                 </table>
@@ -703,30 +1595,15 @@
     </div>
 
     <footer>
-        <p>Projek Kokurikuler Kelas X &copy; 2026 | Didesain oleh Tim Kelompok 4</p>
+        <p>Proyek Kokurikuler Kelas X &copy; 2026 | Didesain oleh Tim Kelompok 4</p>
     </footer>
 
     <script>
-        // Fungsi untuk berpindah tab
-        function openTab(tabName) {
-            let contents = document.getElementsByClassName("tab-content");
-            for (let i = 0; i < contents.length; i++) {
-                contents[i].classList.remove("active");
-            }
-            
-            let buttons = document.getElementsByClassName("tab-btn");
-            for (let i = 0; i < buttons.length; i++) {
-                buttons[i].classList.remove("active");
-            }
-            
-            document.getElementById(tabName).classList.add("active");
-            event.currentTarget.classList.add("active");
-        }
+        // Fungsi tab dipindahkan ke bawah agar tidak duplikat
 
         // Fungsi untuk menghilangkan Splash Screen setelah 3 detik
         document.addEventListener('DOMContentLoaded', function() {
             const splashScreen = document.getElementById('splash-screen');
-            
             setTimeout(function() {
                 splashScreen.classList.add('hide-splash');
             }, 3000);
@@ -735,21 +1612,118 @@
         // Scroll reveal animation
         function revealOnScroll() {
             const reveals = document.querySelectorAll('.scroll-reveal');
-            
             for (let i = 0; i < reveals.length; i++) {
                 const windowHeight = window.innerHeight;
                 const elementTop = reveals[i].getBoundingClientRect().top;
-                const elementVisible = 150;
-                
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add('active');
-                }
+                if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
             }
         }
-
         window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll(); // Trigger on load
-    </script>
+        revealOnScroll();
 
-</body>
-</html>
+        // ============================================================
+        // WARNA BERBEDA & JELAS PER NEGARA (dipakai di SEMUA grafik)
+        // Indonesia = Hijau Zamrud, Mesir = Emas, Turki = Biru Tua, Thailand = Merah
+        // ============================================================
+        const C = {
+            id:   { solid: '#27ae60', border: '#27ae60', bg: 'rgba(39,174,96,0.15)'   },  // Hijau
+            eg:   { solid: '#e67e22', border: '#e67e22', bg: 'rgba(230,126,34,0.15)'  },  // Oranye Emas
+            tr:   { solid: '#2980b9', border: '#2980b9', bg: 'rgba(41,128,185,0.15)'  },  // Biru
+            th:   { solid: '#c0392b', border: '#c0392b', bg: 'rgba(192,57,43,0.15)'   },  // Merah
+        };
+        const COL    = [C.id.solid, C.eg.solid, C.tr.solid, C.th.solid];
+        const COL_BG = [C.id.bg,    C.eg.bg,    C.tr.bg,    C.th.bg   ];
+
+        // ============================================================
+        // GAUGE HELPER — setengah lingkaran (semi-circle)
+        // ============================================================
+        function drawGauge(canvasId, value, max, color) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            const cx = w / 2, cy = h - 4;
+            const r = Math.min(w, h * 2) / 2 - 8;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Track
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, Math.PI, 0, false);
+            ctx.lineWidth = 12;
+            ctx.strokeStyle = '#f0f0f0';
+            ctx.stroke();
+
+            // Fill
+            const pct = Math.min(value / max, 1);
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, Math.PI, Math.PI + pct * Math.PI, false);
+            ctx.lineWidth = 12;
+            ctx.strokeStyle = color;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+        }
+
+        // ============================================================
+        // HORIZONTAL BAR ANIMATION
+        // ============================================================
+        function animateHBars() {
+            document.querySelectorAll('.hbar-range').forEach(el => {
+                const finalW = parseFloat(el.getAttribute('data-final-w') || el.getAttribute('data-w') || 0);
+                setTimeout(() => { el.style.width = finalW + '%'; }, 200);
+            });
+        }
+
+        // ============================================================
+        // INISIALISASI SEMUA CHART
+        // ============================================================
+        let chartsInitialized = false;
+
+        function initCharts() {
+            if (chartsInitialized) return;
+            chartsInitialized = true;
+
+            // Draw gauges
+            drawGauge('gauge-id', 13,   24, C.id.solid);
+            drawGauge('gauge-eg', 14,   24, C.eg.solid);
+            drawGauge('gauge-tr', 15.5, 24, C.tr.solid);
+            drawGauge('gauge-th', 13,   24, C.th.solid);
+
+            // Animate hbars
+            animateHBars();
+
+            // ----------------------------------------------------------
+            // 5. DOUGHNUT — populasi Muslim, warna konsisten
+            // ----------------------------------------------------------
+            new Chart(document.getElementById('chartPopulasi').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Indonesia (231 jt)', 'Mesir (90 jt)', 'Turki (80 jt)', 'Thailand (4.5 jt)'],
+                    datasets: [{
+                        data: [231, 90, 80, 4.5],
+                        backgroundColor: COL.map(c => c + 'cc'),
+                        borderColor: COL,
+                        borderWidth: 3,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    cutout: '55%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10 } },
+                        tooltip: { callbacks: { label: (ctx) => ` ${ctx.label}: ${ctx.raw} juta jiwa` } }
+                    }
+                }
+            });
+        }
+
+        // Tab function — inisialisasi chart saat tab "data" dibuka
+        function openTab(tabName) {
+            let contents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < contents.length; i++) contents[i].classList.remove("active");
+            let buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) buttons[i].classList.remove("active");
+            document.getElementById(tabName).classList.add("active");
+            event.currentTarget.classList.add("active");
+            if (tabName === 'data') setTimeout(initCharts, 100);
+        }</script>
