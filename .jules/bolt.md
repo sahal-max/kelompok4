@@ -1,0 +1,3 @@
+## 2026-07-06 - Hidden animated elements drain resources
+**Learning:** Using `opacity: 0` and `visibility: hidden` on elements with infinite CSS animations (like stars or glowing elements) does not stop the browser from calculating those animations in the background, leading to unnecessary CPU and GPU usage.
+**Action:** Always completely remove animated elements from the DOM using `.remove()` after they are no longer needed (e.g., after fade-out transitions complete).
