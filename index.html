@@ -6,7 +6,14 @@
     <meta name="color-scheme" content="light"> 
     <title>Ramadhan Cultural Exchange | SMKN 1 Wonosobo</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+
+    <!--
+    ⚡ Bolt: Lazy load Chart.js on demand
+    💡 What: Removed synchronous Chart.js script tag from head
+    🎯 Why: Chart.js is large and only needed in the "Analisis Data" tab. Removing it from the head eliminates a render-blocking resource for initial load.
+    📊 Impact: Improves initial page load time and time to interactive (TTI) for users viewing the main content.
+    🔬 Measurement: Verify initial load time and network waterfalls in DevTools.
+    -->
     
     <style>
         /* === TEMA WARNA MODERN === */
@@ -1692,29 +1699,39 @@
             // Animate hbars
             animateHBars();
 
-            // ----------------------------------------------------------
-            // 5. DOUGHNUT — populasi Muslim, warna konsisten
-            // ----------------------------------------------------------
-            new Chart(document.getElementById('chartPopulasi').getContext('2d'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['Indonesia (231 jt)', 'Mesir (90 jt)', 'Turki (80 jt)', 'Thailand (4.5 jt)'],
-                    datasets: [{
-                        data: [231, 90, 80, 4.5],
-                        backgroundColor: COL.map(c => c + 'cc'),
-                        borderColor: COL,
-                        borderWidth: 3,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    cutout: '55%',
-                    plugins: {
-                        legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10 } },
-                        tooltip: { callbacks: { label: (ctx) => ` ${ctx.label}: ${ctx.raw} juta jiwa` } }
+            // ⚡ Bolt: Dynamically load Chart.js only when needed
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js';
+            script.onload = () => {
+                // ----------------------------------------------------------
+                // 5. DOUGHNUT — populasi Muslim, warna konsisten
+                // ----------------------------------------------------------
+                new Chart(document.getElementById('chartPopulasi').getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Indonesia (231 jt)', 'Mesir (90 jt)', 'Turki (80 jt)', 'Thailand (4.5 jt)'],
+                        datasets: [{
+                            data: [231, 90, 80, 4.5],
+                            backgroundColor: COL.map(c => c + 'cc'),
+                            borderColor: COL,
+                            borderWidth: 3,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        cutout: '55%',
+                        plugins: {
+                            legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10 } },
+                            tooltip: { callbacks: { label: (ctx) => ` ${ctx.label}: ${ctx.raw} juta jiwa` } }
+                        }
                     }
-                }
-            });
+                });
+            };
+            script.onerror = () => {
+                console.error('Failed to load Chart.js');
+                chartsInitialized = false; // allow retry
+            };
+            document.head.appendChild(script);
         }
 
         // Tab function — inisialisasi chart saat tab "data" dibuka
