@@ -1609,17 +1609,32 @@
             }, 3000);
         });
 
-        // Scroll reveal animation
-        function revealOnScroll() {
+        // Scroll reveal animation (Optimized with IntersectionObserver)
+        // 💡 What: Replaced window scroll event listener with IntersectionObserver.
+        // 🎯 Why: Scroll event listener causes layout thrashing and blocks the main thread on every scroll.
+        // 📊 Impact: Significantly improves scrolling performance, reducing CPU usage and layout thrashing.
+        // 🔬 Measurement: Observe 60 FPS scrolling and reduced CPU usage in browser performance profiler.
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // Stop observing once revealed to save resources
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            rootMargin: '0px 0px -150px 0px'
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
             const reveals = document.querySelectorAll('.scroll-reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
+            if ('IntersectionObserver' in window) {
+                reveals.forEach(reveal => observer.observe(reveal));
+            } else {
+                // Fallback for older browsers
+                reveals.forEach(reveal => reveal.classList.add('active'));
             }
-        }
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll();
+        });
 
         // ============================================================
         // WARNA BERBEDA & JELAS PER NEGARA (dipakai di SEMUA grafik)
