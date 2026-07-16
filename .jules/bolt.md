@@ -1,0 +1,3 @@
+## 2024-03-24 - Avoid `getBoundingClientRect()` inside scroll listeners
+**Learning:** Using `getBoundingClientRect()` inside a `scroll` event listener causes severe layout thrashing and blocks the main thread because it forces the browser to recalculate layout synchronously on every scroll frame.
+**Action:** Use `IntersectionObserver` instead for visibility checks. It offloads intersection calculations to the browser natively, allowing them to be run asynchronously and significantly improving scroll performance (FPS) and CPU usage.
