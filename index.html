@@ -1609,17 +1609,44 @@
             }, 3000);
         });
 
-        // Scroll reveal animation
-        function revealOnScroll() {
+        // ⚡ Bolt: Replace scroll listener with IntersectionObserver
+        // Why: Using getBoundingClientRect() inside a scroll listener causes layout thrashing
+        // and blocks the main thread, leading to janky scrolling.
+        // Impact: Eliminates O(N) DOM queries and layout recalculations per scroll frame.
+        // The browser handles intersection checks asynchronously, improving scrolling FPS and reducing CPU usage.
+        document.addEventListener('DOMContentLoaded', function() {
             const reveals = document.querySelectorAll('.scroll-reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
+
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    root: null,
+                    rootMargin: '0px 0px -150px 0px',
+                    threshold: 0
+                });
+
+                reveals.forEach(reveal => {
+                    observer.observe(reveal);
+                });
+            } else {
+                // Fallback for older browsers
+                function revealOnScrollFallback() {
+                    for (let i = 0; i < reveals.length; i++) {
+                        const windowHeight = window.innerHeight;
+                        const elementTop = reveals[i].getBoundingClientRect().top;
+                        if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
+                    }
+                }
+                window.addEventListener('scroll', revealOnScrollFallback);
+                revealOnScrollFallback();
             }
-        }
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll();
+        });
 
         // ============================================================
         // WARNA BERBEDA & JELAS PER NEGARA (dipakai di SEMUA grafik)
