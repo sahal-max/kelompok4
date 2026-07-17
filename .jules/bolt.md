@@ -1,0 +1,3 @@
+## 2025-02-28 - Layout Thrashing on Scroll
+**Learning:** Found a common performance anti-pattern in vanilla JS projects where layout measurements (`getBoundingClientRect().top`) are made inside a high-frequency `scroll` event listener without debouncing or throttling. This forces synchronous layouts, blocking the main thread and destroying scroll performance (FPS drops).
+**Action:** Always replace `scroll` event listeners used for visibility checks with `IntersectionObserver`. It offloads visibility calculation to the browser asynchronously, eliminating main-thread blocking.
