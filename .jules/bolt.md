@@ -1,0 +1,3 @@
+## 2024-07-18 - Avoid Expensive Scroll Event Listeners for DOM Queries
+**Learning:** Found an expensive `window.addEventListener('scroll', revealOnScroll)` listener that performed `document.querySelectorAll('.scroll-reveal')` and `getBoundingClientRect().top` on every scroll tick. Making matters worse, there were no `.scroll-reveal` elements in the HTML, meaning the listener was just spinning CPU cycles on the main thread continuously for no reason.
+**Action:** Use `IntersectionObserver` for scroll-based visibility checks instead of binding to the `scroll` event. `IntersectionObserver` is native, runs asynchronously off the main thread, and avoids costly layout thrashing. It also acts as a no-op if there are no elements to observe.
