@@ -1,0 +1,3 @@
+## 2026-07-23 - Scroll Event Thrashing for Scroll Reveals
+**Learning:** Attaching a synchronous callback containing `document.querySelectorAll` and `getBoundingClientRect` to the `scroll` event directly causes severe layout thrashing and main thread blocking, as it fires on every single scroll tick.
+**Action:** Always use `IntersectionObserver` for elements that need to animate or lazy-load when entering the viewport, rather than binding directly to the `scroll` event.
