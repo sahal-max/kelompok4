@@ -1,0 +1,3 @@
+## 2024-06-25 - IntersectionObserver Guard Clauses
+**Learning:** Initializing an `IntersectionObserver` when no elements matching the selector exist (e.g., `document.querySelectorAll('.scroll-reveal')` returns empty) is unnecessary overhead. In this codebase, the `.scroll-reveal` class is defined in CSS but not used in the HTML currently. Without a guard clause, the observer setup would execute needlessly.
+**Action:** Always wrap `IntersectionObserver` (and similar DOM-dependent setup logic) with a check like `if (elements.length > 0)` to prevent creating unused observer instances, especially in static files like `index.html`.
