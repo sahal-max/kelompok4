@@ -1,0 +1,3 @@
+## 2024-05-24 - Unnecessary Active Scroll Listeners
+**Learning:** Found a codebase-specific anti-pattern in `index.html` where an expensive `scroll` event listener (`revealOnScroll`) was active and performing DOM querying (`querySelectorAll`) and layout thrashing (`getBoundingClientRect`) on every scroll event, even though the target CSS class (`.scroll-reveal`) isn't currently used by any HTML element in the document.
+**Action:** Always verify if the target elements of global event listeners actually exist in the DOM. Use `IntersectionObserver` instead of `scroll` listeners for scroll-based visibility logic, and ALWAYS include a guard clause (e.g., `if (elements.length === 0) return;`) to prevent observer initialization completely when the target elements are absent.
