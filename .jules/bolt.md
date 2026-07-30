@@ -1,0 +1,3 @@
+## 2026-07-30 - Inefficient scroll event listeners blocking the main thread
+**Learning:** Found a highly inefficient scroll event listener calculating `getBoundingClientRect` on every scroll tick for `.scroll-reveal` elements in `index.html`. This creates forced synchronous layout thrashing. Furthermore, there are currently *no* elements actually using this class, meaning the query and calculation are pure overhead.
+**Action:** Replaced the scroll listener with an `IntersectionObserver`. Crucially, added a guard clause (`if (reveals.length === 0) return;`) to short-circuit the initialization entirely if the class is not in use, completely removing the overhead.
