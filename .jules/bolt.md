@@ -1,0 +1,3 @@
+## 2024-05-24 - Unused Scroll Listeners with Expensive DOM Queries
+**Learning:** Found a scroll event listener firing `querySelectorAll` and `getBoundingClientRect` on every scroll tick for `.scroll-reveal` elements, even though no elements actually possessed that class in the DOM. This causes significant unnecessary main-thread overhead and layout recalculations (thrashing) completely needlessly.
+**Action:** Always check if target elements exist before attaching scroll listeners, and prefer `IntersectionObserver` over scroll events for scroll-based visibility toggling. Add a guard clause (`if (elements.length > 0)`) when initializing observers.
