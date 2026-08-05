@@ -1,0 +1,3 @@
+## 2023-10-27 - DOM Queries inside Scroll Event Listener
+**Learning:** Using `document.querySelectorAll('.scroll-reveal')` inside a `scroll` event listener is a severe performance anti-pattern. The `scroll` event fires synchronously at a very high rate. Querying the DOM on every tick forces the browser to re-calculate styles and layouts, blocking the main thread and causing jank (scroll stuttering). This is especially bad when there are no elements with the class, as it still queries the entire DOM every time.
+**Action:** Always use `IntersectionObserver` for scroll-based visibility animations instead of attaching high-frequency `scroll` event listeners. Initialize the observer only if the target elements exist in the DOM (guard clause).

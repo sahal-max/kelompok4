@@ -1609,17 +1609,27 @@
             }, 3000);
         });
 
-        // Scroll reveal animation
-        function revealOnScroll() {
-            const reveals = document.querySelectorAll('.scroll-reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
-            }
+        // ⚡ BOLT OPTIMIZATION: IntersectionObserver instead of scroll event
+        // Impact: Eliminates forced synchronous layout (layout thrashing) and main thread blocking
+        // caused by querying the DOM (querySelectorAll) and checking boundingClientRect inside a high-frequency scroll event.
+        const reveals = document.querySelectorAll('.scroll-reveal');
+        if (reveals.length > 0) { // Guard clause: Only initialize if elements exist
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    // Check intersection or if element is already above viewport (e.g. on page reload)
+                    if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // Stop observing once revealed
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '0px 0px -150px 0px', // Mimics windowHeight - 150 behavior
+                threshold: 0
+            });
+
+            reveals.forEach(el => revealObserver.observe(el));
         }
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll();
 
         // ============================================================
         // WARNA BERBEDA & JELAS PER NEGARA (dipakai di SEMUA grafik)
