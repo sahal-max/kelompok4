@@ -1,0 +1,3 @@
+## 2025-01-22 - IntersectionObserver top bound checking
+**Learning:** When using IntersectionObserver to trigger 'reveal' animations on scroll, elements that have already scrolled above the viewport before initialization (e.g., after a page reload) won't trigger `isIntersecting: true`. The observer callback needs to explicitly check `entry.boundingClientRect.top < 0` to properly initialize these elements with their 'active' state.
+**Action:** Always include a top-bound check `entry.boundingClientRect.top < 0` in IntersectionObserver callbacks intended for scroll-reveal effects, to ensure robust behavior on page reload.

@@ -1609,17 +1609,26 @@
             }, 3000);
         });
 
-        // Scroll reveal animation
-        function revealOnScroll() {
-            const reveals = document.querySelectorAll('.scroll-reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
-            }
+        // ⚡ Bolt Optimization: Scroll Reveal via IntersectionObserver
+        // 💡 What: Replaced window scroll event listener and synchronous getBoundingClientRect with IntersectionObserver.
+        // 🎯 Why: 'scroll' events fire rapidly. Computing getBoundingClientRect synchronously causes layout thrashing and blocks the main thread.
+        // 📊 Impact: Significantly reduces CPU usage during scrolling, ensuring smoother 60FPS animations.
+        const reveals = document.querySelectorAll('.scroll-reveal');
+        if (reveals.length > 0) {
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    // Check entry.boundingClientRect.top < 0 to ensure elements already scrolled above the viewport (e.g., on page reload) are revealed
+                    if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px -150px 0px'
+            });
+
+            reveals.forEach(el => revealObserver.observe(el));
         }
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll();
 
         // ============================================================
         // WARNA BERBEDA & JELAS PER NEGARA (dipakai di SEMUA grafik)
