@@ -1,0 +1,3 @@
+## 2024-08-07 - [Replaced Sync Scroll Event with IntersectionObserver]
+**Learning:** [Replacing synchronous layout calculations (like `getBoundingClientRect()`) tied to continuous events like `scroll` with native browser async APIs (like `IntersectionObserver`) prevents layout thrashing and main-thread blocking, significantly improving scrolling frame rate.]
+**Action:** [Always prefer IntersectionObserver or RequestAnimationFrame for continuous visual feedback logic instead of binding directly to raw `scroll` events.]
