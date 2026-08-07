@@ -1609,16 +1609,27 @@
             }, 3000);
         });
 
-        // Scroll reveal animation
+        // ⚡ Bolt: Replace scroll event listener with IntersectionObserver
+        // Why: Scroll event listeners run on the main thread and trigger layout thrashing (getBoundingClientRect) on every scroll tick.
+        // Impact: Reduces main thread blocking by offloading visibility checks to the browser's native IntersectionObserver API.
         function revealOnScroll() {
             const reveals = document.querySelectorAll('.scroll-reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
-            }
+            if (reveals.length === 0) return;
+
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    // Check boundingClientRect.top to ensure elements already scrolled above viewport (e.g. on reload) become active
+                    if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
+                        entry.target.classList.add('active');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px -150px 0px'
+            });
+
+            reveals.forEach(el => observer.observe(el));
         }
-        window.addEventListener('scroll', revealOnScroll);
         revealOnScroll();
 
         // ============================================================
