@@ -1,0 +1,3 @@
+## 2024-05-24 - Optimizing Scroll Reveal Performance
+**Learning:** Attaching a synchronous `scroll` event listener that iterates over all `.scroll-reveal` elements and calls `getBoundingClientRect()` forces synchronous layout calculations and blocks the main thread on every scroll tick.
+**Action:** Replace synchronous scroll event listeners with `IntersectionObserver` when dealing with scroll-triggered animations to offload visibility calculations to the browser's background rendering thread. Use `entry.boundingClientRect.top < 0` to check if elements were already scrolled past before initialization.
