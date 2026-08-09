@@ -1,0 +1,3 @@
+## 2024-05-24 - Layout Thrashing with `scroll` Event Listeners
+**Learning:** Attaching `getBoundingClientRect()` inside a `window.addEventListener('scroll')` callback forces synchronous layout calculations on every scroll tick. This is a common anti-pattern that can drastically reduce scroll performance (jank) since it blocks the main thread with O(n) DOM queries (where n is the number of observed elements).
+**Action:** Use `IntersectionObserver` instead for scroll-based class toggles (like reveal animations) as it is executed asynchronously and does not force layout recalculations, drastically improving framerates on scroll.

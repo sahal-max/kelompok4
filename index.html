@@ -1609,17 +1609,24 @@
             }, 3000);
         });
 
-        // Scroll reveal animation
-        function revealOnScroll() {
-            const reveals = document.querySelectorAll('.scroll-reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
-            }
+        // ⚡ Bolt Performance Optimization:
+        // What: Replaced window.addEventListener('scroll') and getBoundingClientRect() loop with IntersectionObserver.
+        // Why: The previous implementation caused layout thrashing and continuous main thread blocking on every scroll event (O(n) DOM queries per scroll).
+        // Impact: Eliminates forced synchronous layouts on scroll, reducing CPU usage during scroll and achieving smooth 60fps scrolling.
+        const reveals = document.querySelectorAll('.scroll-reveal');
+        if (reveals.length > 0) {
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px -150px 0px'
+            });
+
+            reveals.forEach(el => revealObserver.observe(el));
         }
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll();
 
         // ============================================================
         // WARNA BERBEDA & JELAS PER NEGARA (dipakai di SEMUA grafik)
