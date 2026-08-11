@@ -1,0 +1,3 @@
+## 2024-05-30 - Scroll Event Listener Layout Thrashing
+**Learning:** Using `window.addEventListener('scroll', ...)` and calling `getBoundingClientRect()` synchronously on scroll events causes severe layout thrashing and blocks the main thread, leading to janky scrolling performance.
+**Action:** Always replace scroll-based element visibility tracking with `IntersectionObserver`. When doing so, ensure a guard clause is used to prevent setting up an observer when elements aren't present on the page, and check `entry.boundingClientRect.top < 0` to handle elements that are already above the viewport.
