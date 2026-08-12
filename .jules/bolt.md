@@ -1,0 +1,3 @@
+## 2024-05-18 - Prevent Main Thread Blocking from Scroll Listeners
+**Learning:** Found an anti-pattern in the codebase where a `window.addEventListener('scroll', ...)` was performing `querySelectorAll` and `getBoundingClientRect()` on every scroll event. This causes significant layout thrashing and main thread blocking, even when no target elements (`.scroll-reveal`) are present on the page.
+**Action:** Replaced scroll event listeners with `IntersectionObserver` with a guard clause to only initialize if target elements exist. When writing future scroll-based logic, always use `IntersectionObserver` to offload work from the main thread.
