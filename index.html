@@ -1609,17 +1609,31 @@
             }, 3000);
         });
 
-        // Scroll reveal animation
-        function revealOnScroll() {
-            const reveals = document.querySelectorAll('.scroll-reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
-            }
+        // ⚡ BOLT: Replaced inefficient scroll event listener with IntersectionObserver
+        // Impact: Eliminates layout thrashing and main thread blocking on every scroll event.
+        // Measurement: Can be profiled using Chrome DevTools Performance tab, confirming fewer scroll event handlers and recaculations.
+        const reveals = document.querySelectorAll('.scroll-reveal');
+        if (reveals.length > 0) {
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    // Check if intersecting, or if element is above the viewport (scrolled past on reload)
+                    if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // Stop observing once revealed
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px -150px 0px', // Matches the original `windowHeight - 150` logic
+                threshold: 0
+            });
+
+            reveals.forEach(reveal => observer.observe(reveal));
+
+            // Expose for testing if dynamic elements are added
+            window._setupScrollRevealObserver = observer;
+        } else {
+            window._setupScrollRevealObserver = null;
         }
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll();
 
         // ============================================================
         // WARNA BERBEDA & JELAS PER NEGARA (dipakai di SEMUA grafik)

@@ -1,0 +1,3 @@
+## 2026-08-13 - Replace scroll event with IntersectionObserver
+**Learning:** Found a performance anti-pattern where a scroll event listener runs synchronously and calls `getBoundingClientRect()` on every scroll event for `.scroll-reveal` elements, causing severe layout thrashing.
+**Action:** Replace `window.addEventListener('scroll', ...)` with an `IntersectionObserver` that observes elements efficiently. Add a guard clause to ensure the observer isn't even initialized if there are no elements to observe. Use `entry.boundingClientRect.top < 0` inside the callback to properly reveal elements that were already scrolled past on page load.
