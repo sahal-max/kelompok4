@@ -1609,17 +1609,33 @@
             }, 3000);
         });
 
-        // Scroll reveal animation
-        function revealOnScroll() {
-            const reveals = document.querySelectorAll('.scroll-reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
-            }
+        /*
+         * ⚡ Bolt Performance Optimization
+         * Replaced expensive scroll event listener with IntersectionObserver.
+         * Expected Impact: Eliminates main-thread blocking and layout thrashing during scroll.
+         * The old approach queried the DOM and recalculated styles on every scroll frame.
+         */
+        const reveals = document.querySelectorAll('.scroll-reveal');
+        if (reveals.length > 0) {
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    // entry.boundingClientRect.top < 0 handles elements already scrolled past (e.g., on reload)
+                    if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
+                        entry.target.classList.add('active');
+                        // Stop observing once revealed to save resources
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '0px 0px -150px 0px', // Trigger 150px before entering viewport
+                threshold: 0
+            });
+
+            reveals.forEach(reveal => {
+                revealObserver.observe(reveal);
+            });
         }
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll();
 
         // ============================================================
         // WARNA BERBEDA & JELAS PER NEGARA (dipakai di SEMUA grafik)

@@ -1,0 +1,3 @@
+## 2024-05-24 - Unnecessary DOM queries on scroll event
+**Learning:** Found a performance anti-pattern in `index.html` where `document.querySelectorAll` and layout calculations (`getBoundingClientRect`) were executed on every scroll frame, blocking the main thread and causing layout thrashing.
+**Action:** When implementing scroll-based animations, always use `IntersectionObserver` to offload calculations to the browser engine and avoid synchronous layout thrashing. Also, ensure the observer includes a check like `entry.boundingClientRect.top < 0` to properly handle elements already scrolled past.
