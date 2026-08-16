@@ -1,0 +1,3 @@
+## 2026-08-16 - IntersectionObserver Page Reload Edge Case
+**Learning:** When using `IntersectionObserver` for scroll reveal animations, there's a specific edge case on page reload. If the user refreshes the page while scrolled down, elements that are already completely above the viewport might not trigger `isIntersecting: true` because they never actually cross the intersection threshold.
+**Action:** When implementing `IntersectionObserver` for scroll reveals, always include a check `entry.boundingClientRect.top < 0` alongside `entry.isIntersecting` in the observer callback. This ensures elements already scrolled past still receive the active state (e.g., getting the `.active` class) and don't remain hidden.
