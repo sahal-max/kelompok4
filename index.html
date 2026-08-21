@@ -1609,17 +1609,33 @@
             }, 3000);
         });
 
-        // Scroll reveal animation
-        function revealOnScroll() {
-            const reveals = document.querySelectorAll('.scroll-reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
-            }
+        /*
+         * ⚡ BOLT PERFORMANCE OPTIMIZATION
+         * 💡 What: Replaced synchronous window `scroll` event listener with `IntersectionObserver`.
+         * 🎯 Why: The previous `revealOnScroll` function attached to the `scroll` event called `getBoundingClientRect()` on every element during every scroll event tick. This forced synchronous layout recalculations (layout thrashing) on the main thread, causing jank. `IntersectionObserver` handles visibility calculations asynchronously off the main thread.
+         * 📊 Impact: Significantly reduces main thread blocking time during scrolling, providing a smoother 60fps scrolling experience.
+         * 🔬 Measurement: Scroll performance can be measured using Chrome DevTools Performance tab, observing the reduction in "Recalculate Style" and "Layout" events during scroll.
+         */
+        const reveals = document.querySelectorAll('.scroll-reveal');
+        if (reveals.length > 0) {
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    // entry.isIntersecting handles normal scrolling down
+                    // entry.boundingClientRect.top < 0 handles cases where the element is already above the viewport (e.g., page reload)
+                    if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
+                        entry.target.classList.add('active');
+                        // Stop observing once revealed to save resources
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                rootMargin: "0px 0px -150px 0px" // Triggers when the element is 150px from the bottom of the viewport
+            });
+
+            reveals.forEach(reveal => {
+                revealObserver.observe(reveal);
+            });
         }
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll();
 
         // ============================================================
         // WARNA BERBEDA & JELAS PER NEGARA (dipakai di SEMUA grafik)
