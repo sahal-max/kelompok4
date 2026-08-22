@@ -1,0 +1,3 @@
+## 2024-05-24 - Layout Thrashing in Scroll Listeners
+**Learning:** Found a critical performance bottleneck where a synchronous `scroll` event listener in `index.html` queried the DOM (`querySelectorAll`) and forced a style recalculation (`getBoundingClientRect`) on every scroll event to implement a scroll-reveal animation. This blocks the main thread and causes severe layout thrashing (jank) during scrolling.
+**Action:** Always replace synchronous scroll event listeners that query element positions with `IntersectionObserver`. It tracks visibility asynchronously off the main thread, eliminating layout thrashing and significantly improving scroll performance. Use `rootMargin` to control trigger offsets and `unobserve()` elements once revealed.
