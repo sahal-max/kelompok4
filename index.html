@@ -1609,17 +1609,34 @@
             }, 3000);
         });
 
-        // Scroll reveal animation
-        function revealOnScroll() {
-            const reveals = document.querySelectorAll('.scroll-reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
-            }
+        // ⚡ Bolt: Optimized Scroll Reveal via IntersectionObserver
+        // 💡 What: Replaced scroll event listener with IntersectionObserver
+        // 🎯 Why: Avoids synchronous layout thrashing (getBoundingClientRect) and main thread blocking on every scroll event
+        // 📊 Impact: Significantly reduces CPU usage and improves frame rate during scrolling, eliminating jank caused by forced synchronous layout
+        // 🔬 Measurement: Scroll performance and layout shifts can be profiled in DevTools, observing fewer Long Tasks
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px 0px -150px 0px', // Triggers 150px before the element enters the viewport, similar to the original logic
+            threshold: 0
+        };
+
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                // If it's intersecting, or if it's already above the viewport (e.g. on reload)
+                if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Optional: unobserve if it only needs to reveal once
+                }
+            });
+        }, observerOptions);
+
+        const reveals = document.querySelectorAll('.scroll-reveal');
+        // Only initialize observer if there are elements to observe
+        if (reveals.length > 0) {
+            reveals.forEach(reveal => {
+                revealObserver.observe(reveal);
+            });
         }
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll();
 
         // ============================================================
         // WARNA BERBEDA & JELAS PER NEGARA (dipakai di SEMUA grafik)

@@ -1,0 +1,3 @@
+## 2024-08-26 - Scroll Animation Layout Thrashing
+**Learning:** The legacy scroll animation implementation (`revealOnScroll`) triggers forced synchronous layout by invoking `getBoundingClientRect().top` within a continuous scroll event listener. This causes layout thrashing and main thread blocking, which degrades frame rate during scrolling.
+**Action:** Replace all custom scroll-position tracking logic for animations with the native `IntersectionObserver` API. When implementing the observer, ensure elements already above the viewport (e.g. `entry.boundingClientRect.top < 0`) are handled properly, particularly when reloading the page.
