@@ -1,0 +1,3 @@
+## 2024-05-24 - Layout Thrashing in index.html Scroll Animation
+**Learning:** The static architecture of the site places all logic in `index.html`. The previous scroll animation relied on an event listener triggering synchronous DOM queries (`getBoundingClientRect`) during scroll events, causing a severe layout thrashing bottleneck specific to this un-minified single-page structure. Replacing this with an `IntersectionObserver` drastically reduced main thread blocking.
+**Action:** Always scan scroll-based event listeners in single-file architectures for synchronous DOM read/writes and replace them with modern Observer APIs to preserve 60fps scrolling without sacrificing functional fidelity.
