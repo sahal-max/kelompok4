@@ -1,0 +1,3 @@
+## 2024-05-18 - Replacing Scroll Event Listeners with IntersectionObserver
+**Learning:** When migrating scroll-based animations (like reveal effects) to `IntersectionObserver`, elements that are already fully scrolled past (e.g., above the viewport on initial load or fast reload) might not trigger a visibility transition in the expected direction if the observer relies purely on `isIntersecting`.
+**Action:** Always include a guard clause in the observer callback (`entry.boundingClientRect.top < 0`) to ensure elements already positioned above the viewport are immediately activated.
