@@ -1610,16 +1610,26 @@
         });
 
         // Scroll reveal animation
-        function revealOnScroll() {
+        // ⚡ Bolt Optimization: Replaced synchronous scroll event listener with IntersectionObserver.
+        // Impact: Eliminates main thread blocking during scrolling, saving significant CPU cycles.
+        function initScrollReveal() {
             const reveals = document.querySelectorAll('.scroll-reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
-            }
+            if (reveals.length === 0) return;
+
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
+                        entry.target.classList.add('active');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px -150px 0px'
+            });
+
+            reveals.forEach(reveal => observer.observe(reveal));
         }
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll();
+        initScrollReveal();
 
         // ============================================================
         // WARNA BERBEDA & JELAS PER NEGARA (dipakai di SEMUA grafik)
