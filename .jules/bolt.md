@@ -1,0 +1,3 @@
+## 2024-09-07 - Playwright DOM Injection Timing
+**Learning:** When dynamically injecting elements into `index.html` during Playwright testing to verify frontend logic (like scroll observers), any native event listeners or `IntersectionObserver` instances initialized on `DOMContentLoaded` or synchronous script execution will *not* automatically attach to the newly injected elements because the native scripts run before the test context modifications occur.
+**Action:** Always re-evaluate and re-bind the specific frontend logic (e.g., copying the observer initialization code) within the Playwright `page.evaluate()` block to ensure it correctly targets the test-injected elements.
