@@ -1,0 +1,3 @@
+## 2024-09-11 - IntersectionObserver with Guard Clause Over Scroll Listeners
+**Learning:** Attaching a synchronous `window.addEventListener('scroll', ...)` that performs `querySelectorAll` and `getBoundingClientRect()` on every scroll tick is a severe performance anti-pattern (layout thrashing). It's even worse when the target elements don't actually exist on the page yet (as was the case with `.scroll-reveal`), needlessly consuming resources.
+**Action:** Always replace scroll-based visibility checks with `IntersectionObserver`. Crucially, implement a guard clause (`if (elements.length === 0) return;`) before instantiating the observer to avoid memory overhead when the feature is unused.
