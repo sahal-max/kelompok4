@@ -1,0 +1,3 @@
+## 2024-06-15 - IntersectionObserver for Scroll Reveals
+**Learning:** The previous implementation used an expensive `window.addEventListener('scroll', ...)` bound to `getBoundingClientRect()` which caused layout thrashing and main-thread blocking on every scroll event, especially since there are actually zero elements using the `.scroll-reveal` class in the HTML.
+**Action:** Always replace scroll event listeners used for visibility checks with `IntersectionObserver`. Include a guard clause (`if (elements.length > 0)`) before initializing the observer to avoid unnecessary setup when no elements exist, and call `unobserve()` after the target is revealed to save resources.
