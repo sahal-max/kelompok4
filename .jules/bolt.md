@@ -1,0 +1,3 @@
+## 2024-03-24 - IntersectionObserver Over Scroll Listeners
+**Learning:** Attaching `window.addEventListener('scroll', fn)` without debouncing and repeatedly querying the DOM inside the event handler (e.g., `document.querySelectorAll`) is a major performance bottleneck, especially if the queried elements (`.scroll-reveal`) don't even exist initially. It causes unnecessary layout calculations and CPU cycles on every scroll event.
+**Action:** Replace scroll event listeners with `IntersectionObserver` when dealing with scroll-based visibility checks. Ensure a guard clause is used to avoid setting up observers if no target elements exist in the DOM.
