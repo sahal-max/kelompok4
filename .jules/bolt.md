@@ -1,0 +1,3 @@
+## 2024-09-14 - Scroll Event Anti-Pattern
+**Learning:** Found an expensive `scroll` event listener in `index.html` that queries the DOM via `document.querySelectorAll('.scroll-reveal')` and `getBoundingClientRect()` on every scroll event. Surprisingly, zero elements in the HTML actually use the `.scroll-reveal` class. This causes main thread blocking and layout thrashing for absolutely no reason.
+**Action:** Replace `scroll` event listeners with `IntersectionObserver`. Always add a guard clause (`if (elements.length === 0) return;`) before initializing observers to save memory and processing time when the target elements don't exist.
