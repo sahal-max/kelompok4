@@ -1609,17 +1609,27 @@
             }, 3000);
         });
 
-        // Scroll reveal animation
-        function revealOnScroll() {
+        // ⚡ Bolt Performance Optimization
+        // 💡 What: Replaced expensive scroll listener with IntersectionObserver.
+        // 🎯 Why: `revealOnScroll` ran on every scroll, querying the DOM and causing layout thrashing via getBoundingClientRect().
+        // 📊 Impact: Eliminates main thread blocking on scroll. The guard clause also prevents observer initialization since no elements currently use the class.
+        // 🔬 Measurement: Scroll performance (FPS) should remain steady at 60fps without JS execution spikes.
+        document.addEventListener('DOMContentLoaded', function() {
             const reveals = document.querySelectorAll('.scroll-reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
-            }
-        }
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll();
+            if (reveals.length === 0) return; // Guard clause: avoid init if class is unused
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    // Check if intersecting OR if already scrolled past (above viewport)
+                    if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // Stop observing once revealed
+                    }
+                });
+            }, { rootMargin: '0px 0px -150px 0px' });
+
+            reveals.forEach(el => observer.observe(el));
+        });
 
         // ============================================================
         // WARNA BERBEDA & JELAS PER NEGARA (dipakai di SEMUA grafik)
