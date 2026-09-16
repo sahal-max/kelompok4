@@ -1,0 +1,3 @@
+## 2024-05-24 - Unused Scroll Reveal Logic Causes Constant Layout Thrashing
+**Learning:** In `index.html`, the `.scroll-reveal` logic was continuously querying the DOM and calculating bounds on every single scroll event, even though the `.scroll-reveal` class is not actually used on any element in the HTML. This caused unnecessary main thread work.
+**Action:** Always replace scroll-bound `getBoundingClientRect` calls with `IntersectionObserver` when dealing with reveal animations, and critically, guard the observer initialization with a check like `if (elements.length > 0)` to prevent allocating resources for unused features. Additionally, unobserve elements once they've revealed.
