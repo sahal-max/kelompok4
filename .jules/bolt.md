@@ -1,0 +1,3 @@
+## 2025-02-20 - Optimize Scroll Listeners with IntersectionObserver
+**Learning:** Found a performance anti-pattern where a scroll event listener (`window.addEventListener('scroll')`) was used for element reveal animations without debouncing or throttling. It recalculates bounding rects on every scroll tick.
+**Action:** Replaced it with an `IntersectionObserver`. Crucially, added a guard clause (`if (reveals.length === 0) return;`) to prevent observer instantiation when the class is unused, and ensured elements already above the viewport are handled via `entry.boundingClientRect.top < 0`. Used `observer.unobserve()` to detach from elements after they animate to save resources.
