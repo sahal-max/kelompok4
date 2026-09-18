@@ -1,0 +1,3 @@
+## 2024-06-11 - IntersectionObserver replaces scroll event listener
+**Learning:** Found a performance bottleneck where a synchronous scroll listener (`window.addEventListener('scroll', revealOnScroll)`) evaluates elements constantly on scroll. More surprisingly, the `scroll-reveal` class is not even used by any HTML element in the current file, causing it to iterate over an empty NodeList constantly and unnecessarily triggering layout calculations.
+**Action:** Replace `window.addEventListener('scroll')` with `IntersectionObserver` with a guard clause that checks if there are any elements before observing. This improves efficiency and saves resources.
