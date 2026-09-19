@@ -1,0 +1,3 @@
+## 2024-05-24 - IntersectionObserver with Fallbacks
+**Learning:** When using IntersectionObserver to replace scroll events, it's crucial to handle elements that might already be above the viewport when the observer is initialized. Checking `entry.boundingClientRect.top < 0` alongside `entry.isIntersecting` prevents those elements from being stuck in an unrevealed state. Furthermore, a simple guard clause (`if (elements.length === 0) return;`) prevents unnecessary observer instantiation when the class isn't used.
+**Action:** Always include a guard clause for IntersectionObservers and account for elements outside the viewport based on their bounding client rect if immediate activation is expected.
