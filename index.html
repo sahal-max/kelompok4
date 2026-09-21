@@ -1610,16 +1610,27 @@
         });
 
         // Scroll reveal animation
-        function revealOnScroll() {
-            const reveals = document.querySelectorAll('.scroll-reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
-            }
+        // ⚡ Bolt Optimization: Replace synchronous scroll event listener with IntersectionObserver.
+        // Impact: Eliminates expensive DOM recalcs on every scroll frame (getBoundingClientRect),
+        // reducing main thread blocking and preventing layout thrashing. Prevents unnecessary memory
+        // allocation via guard clause. Automatically unobserves elements to save resources.
+        const reveals = document.querySelectorAll('.scroll-reveal');
+        if (reveals.length > 0) {
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    // entry.boundingClientRect.top < 0 handles elements that are already scrolled past
+                    // (e.g. on page refresh)
+                    if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
+                        entry.target.classList.add('active');
+                        obs.unobserve(entry.target); // Unobserve once revealed
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px -150px 0px' // Equivalent to windowHeight - 150
+            });
+
+            reveals.forEach(el => observer.observe(el));
         }
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll();
 
         // ============================================================
         // WARNA BERBEDA & JELAS PER NEGARA (dipakai di SEMUA grafik)
