@@ -1,0 +1,3 @@
+## 2024-06-03 - Unused Class Scroll Listener Anti-Pattern
+**Learning:** Found a scroll event listener attached to `window` for reveal animations based on a class (`.scroll-reveal`) that is currently NOT used on any HTML element. This triggers `document.querySelectorAll('.scroll-reveal')` and layout calculations on *every single scroll event*, even though there are zero elements to animate, causing significant layout thrashing and CPU overhead.
+**Action:** When implementing scroll-based reveal animations, always use `IntersectionObserver` instead of raw scroll events. Add a guard clause checking if the queried elements actually exist (`if (elements.length === 0) return`) before setting up the observer to save resources on pages where the class is unused.
