@@ -1610,16 +1610,37 @@
         });
 
         // Scroll reveal animation
-        function revealOnScroll() {
+        // ⚡ Bolt Optimization: Replace scroll event listener with IntersectionObserver
+        // Expected Impact: Eliminates forced synchronous layout calculation (getBoundingClientRect)
+        // on every scroll event, reducing main thread blocking and preventing scroll jank.
+        function initRevealObserver() {
             const reveals = document.querySelectorAll('.scroll-reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
-            }
+            if (reveals.length === 0) return;
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    // Check if element is intersecting or already scrolled past (above viewport)
+                    if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // Stop observing once revealed to save resources
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '0px 0px -150px 0px',
+                threshold: 0
+            });
+
+            reveals.forEach(reveal => {
+                observer.observe(reveal);
+            });
         }
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll();
+
+        // Initialize the observer
+        document.addEventListener('DOMContentLoaded', initRevealObserver);
+
+        // Expose function globally for testing/dynamic injection
+        window.initRevealObserver = initRevealObserver;
 
         // ============================================================
         // WARNA BERBEDA & JELAS PER NEGARA (dipakai di SEMUA grafik)
