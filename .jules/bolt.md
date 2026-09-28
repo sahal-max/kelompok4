@@ -1,0 +1,3 @@
+## 2023-11-20 - [Scroll Event Performance Bottleneck]
+**Learning:** Attaching continuous layout-trashing calculations (like `getBoundingClientRect()`) to the `window.onscroll` event causes severe main thread blocking and jank, especially in static HTML files with many elements.
+**Action:** Always replace scroll-based visibility checks with `IntersectionObserver`. Ensure to include a guard clause for unused classes and disconnect observers (`observer.unobserve()`) once they trigger to conserve memory and CPU.
