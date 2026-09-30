@@ -1,0 +1,3 @@
+## 2024-05-24 - Avoid Sync Scroll Event Listeners for Reveal Animations
+**Learning:** Using `window.addEventListener('scroll', ...)` that triggers `getBoundingClientRect()` on every scroll event severely impacts main thread performance and forces browser layout recalculations. Even if no elements exist on the page to animate, the function will still run needlessly on every scroll tick.
+**Action:** Always prefer `IntersectionObserver` for scroll-reveal animations. Include a guard clause to prevent the observer from initializing if there are no matching elements. Finally, unobserve elements after they are revealed to save CPU resources.
