@@ -1609,17 +1609,33 @@
             }, 3000);
         });
 
-        // Scroll reveal animation
-        function revealOnScroll() {
+        /*
+         * ⚡ Bolt Performance Optimization
+         * What: Replaced synchronous scroll event listener with IntersectionObserver.
+         * Why: The previous implementation fired continuously on scroll, queried the DOM,
+         *      and forced layout calculations (getBoundingClientRect), causing main thread blocking.
+         * Impact: Eliminates scroll jank and layout thrashing. Reduces CPU usage during scrolling.
+         * Measurement: Verify smoother scrolling and lower main thread activity in DevTools Performance tab.
+         */
+        function initRevealObserver() {
             const reveals = document.querySelectorAll('.scroll-reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 150) reveals[i].classList.add('active');
-            }
+            if (reveals.length === 0) return; // Guard clause if no elements exist
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    // Check if intersecting or already scrolled past (above viewport)
+                    if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // Stop observing once revealed
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px -150px 0px' // Equivalent to windowHeight - 150 in the old code
+            });
+
+            reveals.forEach(reveal => observer.observe(reveal));
         }
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll();
+        document.addEventListener('DOMContentLoaded', initRevealObserver);
 
         // ============================================================
         // WARNA BERBEDA & JELAS PER NEGARA (dipakai di SEMUA grafik)
