@@ -1616,12 +1616,12 @@
             const reveals = document.querySelectorAll('.scroll-reveal');
             if (reveals.length === 0) return; // Guard clause to save resources if no elements exist
 
-            const observer = new IntersectionObserver((entries, observer) => {
+            const observer = new IntersectionObserver((entries, obs) => {
                 entries.forEach(entry => {
                     // Check if intersecting or already scrolled past (above viewport)
                     if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
                         entry.target.classList.add('active');
-                        observer.unobserve(entry.target); // Stop observing once revealed
+                        obs.unobserve(entry.target); // Stop observing once revealed
                     }
                 });
             }, {
