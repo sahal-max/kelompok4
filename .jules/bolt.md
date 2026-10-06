@@ -1,0 +1,3 @@
+## 2026-10-06 - Testing IntersectionObserver with Negative Margins
+**Learning:** When verifying scroll-based logic (e.g., IntersectionObserver) with Playwright, ensure the test environment injects sufficient bottom padding if negative root margins are used. Default scroll-into-view commands may just align the element to the viewport's bottom edge, failing to trigger negative margins (like `-150px`).
+**Action:** Always include an additional explicit scroll down (e.g., `window.scrollBy(0, 500)`) after a scroll-into-view command or inject explicit padding at the bottom of the page to ensure elements pass the IntersectionObserver trigger threshold.
