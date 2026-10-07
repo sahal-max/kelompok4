@@ -1,0 +1,3 @@
+## 2024-06-25 - Avoid Synchronous Layout Thrashing in Scroll Event Listeners
+**Learning:** Attaching logic to `window.addEventListener('scroll')` that executes `getBoundingClientRect()` forces the browser into synchronous layout recalculations (thrashing). This drastically slows down scrolling performance and ties up the main thread.
+**Action:** Use `IntersectionObserver` whenever an action depends on the visibility or position of an element relative to the viewport. Ensure observers use negative rootMargins accurately, guard clauses are present, and elements are unobserved after activation to minimize computational overhead.
