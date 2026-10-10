@@ -1,0 +1,3 @@
+## 2024-05-24 - IntersectionObserver instead of Scroll Event
+**Learning:** Attaching a synchronous `revealOnScroll` function to the window's `scroll` event to check element positions via `getBoundingClientRect` causes excessive main thread blocking and layout thrashing, as it fires on every pixel scrolled. This is a common anti-pattern for `.scroll-reveal` elements.
+**Action:** Always replace scroll-bound layout calculations with `IntersectionObserver`. Include a guard clause to return early if no target elements exist in the DOM, and unobserve elements after they become visible to save memory and CPU cycles. Use `rootMargin` to offset trigger points instead of manual math.
