@@ -1,0 +1,3 @@
+## 2024-05-24 - Unnecessary DOM queries on scroll
+**Learning:** Found a specific codebase anti-pattern in `index.html` where an expensive 'scroll' event listener combined with `getBoundingClientRect()` was used to reveal elements, but it executed continuously even when there were no elements with the `.scroll-reveal` class, causing layout thrashing.
+**Action:** Replace `scroll` event listeners with `IntersectionObserver` and use a guard clause to exit early if no target elements are present to save memory. Also, call `observer.unobserve` after the element is revealed to stop observing once the animation is complete.
