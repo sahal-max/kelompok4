@@ -1,0 +1,3 @@
+## 2024-05-24 - Optimizing Scroll Animations with IntersectionObserver
+**Learning:** Replacing a passive scroll event listener containing `getBoundingClientRect()` with an `IntersectionObserver` avoids main-thread layout thrashing (reflows). Also, correctly applying `rootMargin` (e.g., `'0px 0px -150px 0px'`) triggers the animation just before the element enters the viewport, and unobserving the element afterwards saves resources.
+**Action:** When implementing scroll-triggered one-time animations, always use `IntersectionObserver` with appropriate `rootMargin` and `unobserve()` after triggering, rather than binding to the scroll event.
