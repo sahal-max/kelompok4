@@ -1,0 +1,3 @@
+## 2024-03-21 - Avoiding Expensive Listeners on Non-existent Elements
+**Learning:** Attaching a `scroll` event listener and checking coordinates on every scroll is extremely expensive and causes performance bottlenecks, especially when the elements targeted (`.scroll-reveal`) don't even currently exist in the HTML.
+**Action:** When working with scroll-based animations, always use `IntersectionObserver` instead of raw scroll listeners. Additionally, include an early return guard clause to skip initialization if the targeted elements (`reveals.length === 0`) are not present in the DOM to prevent unnecessary setup logic.
