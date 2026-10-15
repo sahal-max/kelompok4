@@ -1,0 +1,4 @@
+## 2024-05-24 - InteractionObserver Validation
+
+**Learning:** When using Playwright to test elements that are dynamically added and use `IntersectionObserver` with a negative root margin (e.g., `-150px`), `scrollIntoView` might not trigger the intersection if the element is placed such that it only aligns to the bottom of the viewport. Also, you need to manually call the initialization function (e.g., `initRevealObserver()`) if the element was injected after the page loaded.
+**Action:** When testing scroll observers with negative bottom root margins, ensure the target element is placed well below the initial viewport, give the body sufficient `minHeight`, and explicitly scroll past the element (using `window.scrollTo` or `window.scrollBy`) rather than just using `scrollIntoView`. Always re-bind observers for dynamically injected test elements.
