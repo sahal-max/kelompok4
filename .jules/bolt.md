@@ -1,0 +1,3 @@
+## 2024-05-18 - Scroll Event Layout Thrashing
+**Learning:** Using `window.addEventListener('scroll', ...)` combined with `getBoundingClientRect()` inside the event handler causes synchronous layout thrashing. It repeatedly forces the browser to recalculate the layout on the main thread every time the user scrolls, which severely degrades scroll performance and frame rate.
+**Action:** Replace synchronous scroll event listeners that query element positions with `IntersectionObserver`. It offloads the intersection calculation off the main thread, resulting in a significantly smoother scrolling experience and better performance. Use `unobserve` after the element is revealed to save resources.
