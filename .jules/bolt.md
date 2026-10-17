@@ -1,0 +1,3 @@
+## 2025-02-23 - IntersectionObserver vs Scroll Event Listener
+**Learning:** Attaching a scroll event listener directly to `window` for reveal animations (like `scroll-reveal`) blocks the main thread because it fires synchronously and triggers layout thrashing (`getBoundingClientRect()`) multiple times per scroll event.
+**Action:** Always replace scroll event listeners for visibility checks with `IntersectionObserver`. Remember to include a check `entry.isIntersecting || entry.boundingClientRect.top < 0` inside the callback to ensure elements already scrolled past the viewport before initialization still get the active class, preventing layout bugs on initial load or fast scrolling.
